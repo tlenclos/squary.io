@@ -1,47 +1,63 @@
 // Set up a collection to contain player information. On the server,
 // it is backed by a MongoDB collection named "players".
 
-Players = new Meteor.Collection("players");
+PixelBoardsCollection = new Meteor.Collection("pixelboards");
 
-if (Meteor.isClient) {
-  Template.leaderboard.players = function () {
-    return Players.find({}, {sort: {score: -1, name: 1}});
-  };
+// Board Class
+function PixelBoards ()
+{
+  // Set up the canvas element
+  this.setup = function()
+  {
+    console.log(Meteor.status());
+    canvas = document.getElementById('canvas');
+    ctx    = canvas.getContext('2d');
 
-  Template.leaderboard.selected_name = function () {
-    var player = Players.findOne(Session.get("selected_player"));
-    return player && player.name;
-  };
+    var board = PixelBoardsCollection.findOne();
+    var color = board ? board.color : null;
+    this.drawBackground(color);
+  }
 
-  Template.player.selected = function () {
-    return Session.equals("selected_player", this._id) ? "selected" : '';
-  };
+  // Events
+  this.setupEvents = function()
+  {
+    var self = this;
+    canvas.addEventListener('click', function(e)
+    {
+      var board = PixelBoardsCollection.findOne();
+      var color = board.color === "#111" ? "#CCC" : "#111";
+      PixelBoardsCollection.update(board._id, {$set: {color: color}});
+    });
+  }
 
-  Template.leaderboard.events({
-    'click input.inc': function () {
-      Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+  // Set up listeners for the draw method
+  this.startUpdateListener = function()
+  {
+    var self = this;
+    var redrawCanvas = function()
+    {
+      var context = new Meteor.deps.Context()
+      context.on_invalidate(redrawCanvas)
+
+      context.run(function()
+      {
+        self.drawBackground(PixelBoardsCollection.findOne().color);
+      })
     }
-  });
+    redrawCanvas()
+  }
 
-  Template.player.events({
-    'click': function () {
-      Session.set("selected_player", this._id);
+  // Draw background
+  this.drawBackground = function(color) {
+    if (color) {
+      ctx.fillStyle   = color;
     }
-  });
+    ctx.fillRect (0, 0, 200, 200);
+  }
+
+  this.resetBoard = function() {
+    PixelBoardsCollection.remove({});
+    PixelBoardsCollection.insert({color: "#CCC"});
+  }
 }
 
-// On server startup, create some players if the database is empty.
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    if (Players.find().count() === 0) {
-      var names = ["Ada Lovelace",
-                   "Grace Hopper",
-                   "Marie Curie",
-                   "Carl Friedrich Gauss",
-                   "Nikola Tesla",
-                   "Claude Shannon"];
-      for (var i = 0; i < names.length; i++)
-        Players.insert({name: names[i], score: Math.floor(Random.fraction()*10)*5});
-    }
-  });
-}
