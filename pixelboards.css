@@ -11,10 +11,21 @@ body {
 }
 
 /* Canvas */
-#canvas {
-    display : block;
-    margin: auto;
-    border: 1px solid grey;
-    height: 200px;
-    width: 200px;
+#canvasboard {
+    z-index: 20;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/* Controls */
+#controls {
+    position: absolute;
+    z-index: 40;
+    border : 2px solid black;
+    padding : 10px;
+    background-color : white;
+}
+#controls p {
+    margin : 0;
 }
