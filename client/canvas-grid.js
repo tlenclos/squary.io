@@ -1,9 +1,10 @@
-function canvasGrid (canvasId, dataMatrix, customWidth, customHeight) {
+function canvasGrid (canvasId, dataMatrix, customWidth, customHeight){
 
     var c = document.getElementById(canvasId);
     var ctx = c.getContext("2d");
+    var self = this;
 
-    function draw() {
+    this.draw = function draw() {
         var mHeight = dataMatrix.length;
         var mWidth = matrixWidth();
         var cellHeight = customHeight || c.height / mHeight;
@@ -18,11 +19,12 @@ function canvasGrid (canvasId, dataMatrix, customWidth, customHeight) {
             }
         }
     }
-    draw();
+
+    this.draw();
 
     //Object.observe(dataMatrix, function () {
     watch(dataMatrix, function () {
-        draw();
+        self.draw();
     });
 
     function matrixWidth() {
@@ -33,4 +35,6 @@ function canvasGrid (canvasId, dataMatrix, customWidth, customHeight) {
         };
         return w;
     }
+
+    return this;
 }

@@ -7,6 +7,9 @@ PixelBoardsCollection = new Meteor.Collection("pixelboards");
 // Board Class
 function PixelBoards ()
 {
+  this.canvasGrid = null;
+  var self = this;
+
   // Set up the canvas element
   this.setup = function()
   {
@@ -25,6 +28,14 @@ function PixelBoards ()
     w = ~~ (canvas.width / pixelSize);
     h = ~~ (canvas.height / pixelSize);
 
+    this.resetGrid();
+
+    this.canvasGrid = new canvasGrid("canvasboard", grid, pixelSize, pixelSize);
+  }
+
+  // Start | Reset the grid
+  this.resetGrid = function()
+  {
     for(var i=0; i<h; i++) {
         for(var j=0; j<w; j++) {
             if(!grid[i])
@@ -33,15 +44,11 @@ function PixelBoards ()
             grid[i][j] = '#CCC';
         }
     }
-
-    canvasGrid("canvasboard", grid, pixelSize, pixelSize);
   }
 
   // Events
   this.setupEvents = function()
   {
-    var self = this;
-
     $(canvas).click(function(e) {
         var colorPixel = "black";
 
@@ -86,15 +93,19 @@ function PixelBoards ()
   // Set up listeners for the draw method
   this.startUpdateListener = function()
   {
-    var self = this;
+    // Each time we interact with PixelBoardsCollection this method is call
     Deps.autorun(function()
     {
       var pixels = PixelBoardsCollection.find({});
-      console.log('Draw '+pixels.count()+ ' pixels');
 
       _.each(pixels.fetch(), function(item) {
         grid[item.y][item.x] = item.color; // Trigger the redraw
       });
+
+      if(pixels.count() == 0) {
+        self.resetGrid();
+        self.canvasGrid.draw();
+      }
     });
   }
 }

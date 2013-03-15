@@ -15,13 +15,10 @@ if (Meteor.isClient) {
   // Templates
   Template.tcontrols.events({
     'click p#clean': function () {
-      console.log('Clean board');
-      // We can't remove all items from an events
-      _.each(PixelBoardsCollection.find({}).fetch(), function(item) {
+      var pixels = PixelBoardsCollection.find({}).fetch();
+      _.each(pixels, function(item) {
         PixelBoardsCollection.remove({'_id': item._id});
       });
-
-      //TODO : Redraw canvas
     }
   });
 
