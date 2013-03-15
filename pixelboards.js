@@ -43,6 +43,8 @@ function PixelBoards ()
     var self = this;
 
     $(canvas).click(function(e) {
+        var colorPixel = "black";
+
         // quick fill function to save repeating myself later
         function fill(s, gx, gy) {
             ctx.fillStyle = s;
@@ -62,15 +64,22 @@ function PixelBoards ()
             return;
         }
 
-        var colorPixel = "black";
-        PixelBoardsCollection.insert({x: gx, y: gy, color: colorPixel});
+        // Db
+        var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
+        if(pixel) {
+          colorPixel = "green";
+          PixelBoardsCollection.update(
+            pixel._id,
+            {$set: {color : colorPixel}}
+          );
+        } else {
+          PixelBoardsCollection.insert({x: gx, y: gy, color: colorPixel});
+        }
 
+        // Local array
         if (grid[gy] && grid[gy][gx]) {
           grid[gy][gx] = colorPixel;
         }
-
-        // TODO : Update if pixel already exist
-        // PixelBoardsCollection.update({x: gx, y: gy, color: "black"});
     });
   }
 
