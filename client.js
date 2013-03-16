@@ -1,15 +1,17 @@
 if (Meteor.isClient) {
-
   // This method runs EVERY time the client is opened, which includes page refreshes.
   Meteor.startup(function()
   {
-    // TODO : Check if connection with the server has been established
-    setTimeout(function() {
-      var pixelboards = new PixelBoards();
-      pixelboards.setup();
-      pixelboards.setupEvents();
-      pixelboards.startUpdateListener();
-    }, 500);
+    // TODO : Display a preloader untill connection and data
+    Deps.autorun(function() {
+      var isConnected = Meteor.status().connected;
+      if(isConnected) {
+        var pixelboards = new PixelBoards();
+        pixelboards.setup();
+        pixelboards.setupEvents();
+        pixelboards.startUpdateListener();
+      }
+    });
   });
 
   // Templates

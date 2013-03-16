@@ -13,7 +13,6 @@ function PixelBoards ()
   // Set up the canvas element
   this.setup = function()
   {
-    console.log(Meteor.status());
     canvas = document.getElementById('canvasboard');
     ctx    = canvas.getContext('2d');
 
