@@ -59,8 +59,8 @@ function PixelBoards ()
         }
 
         // get mouse click position
-        var mx = e.offsetX;
-        var my = e.offsetY;
+        var mx = e.pageX;
+        var my = e.pageY;
 
         // calculate grid square numbers
         var gx = ~~ (mx / pixelSize);
