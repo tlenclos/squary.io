@@ -105,6 +105,8 @@ function PixelBoards ()
         self.resetGrid();
         self.canvasGrid.draw();
       }
+
+      $('#loader').hide('slow');
     });
   }
 }

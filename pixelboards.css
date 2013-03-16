@@ -10,12 +10,14 @@ body {
     user-select: none;
 }
 
-/* Canvas */
-#canvasboard {
-    z-index: 20;
+/* Loader */
+#loader {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    right: 10px;
+    z-index: 60;
+    background: url('loading.gif');
+    height: 64px;
+    width: 64px;
 }
 
 /* Controls */
@@ -28,4 +30,12 @@ body {
 }
 #controls p {
     margin : 0;
+}
+
+/* Canvas */
+#canvasboard {
+    z-index: 20;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

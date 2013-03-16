@@ -5,7 +5,8 @@ if (Meteor.isClient) {
     // TODO : Display a preloader untill connection and data
     Deps.autorun(function() {
       var isConnected = Meteor.status().connected;
-      if(isConnected) {
+
+      if (isConnected) {
         var pixelboards = new PixelBoards();
         pixelboards.setup();
         pixelboards.setupEvents();
