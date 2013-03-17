@@ -70,7 +70,6 @@ function PixelBoards ()
 
         // Db
         if (pixel) {
-          colorPixel = "green";
           PixelBoardsCollection.update(
             pixel._id,
             {$set: {color : colorPixel}}
