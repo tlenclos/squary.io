@@ -8,6 +8,7 @@ PixelBoardsCollection = new Meteor.Collection("pixelboards");
 function PixelBoards ()
 {
   this.canvasGrid = null;
+  this.defaultColorPixel = "#CCC";
   var self = this;
 
   // Set up the canvas element
@@ -48,7 +49,17 @@ function PixelBoards ()
   // Events
   this.setupEvents = function()
   {
-    $(canvas).click(function(e) {
+    $(document).on("contextmenu", function(e) {
+       return false;
+    });
+
+    $(canvas).mousedown(function(e) {
+      var positions = self.getPixelIndexes(e);
+      var gx = positions[0];
+      var gy = positions[1];
+      var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
+
+      if (event.which == 1) { // Mouse left
         var colorPixel = "black";
 
         // quick fill function to save repeating myself later
@@ -57,22 +68,8 @@ function PixelBoards ()
             ctx.fillRect(gx * pixelSize, gy * pixelSize, pixelSize, pixelSize);
         }
 
-        // get mouse click position
-        var mx = e.pageX;
-        var my = e.pageY;
-
-        // calculate grid square numbers
-        var gx = ~~ (mx / pixelSize);
-        var gy = ~~ (my / pixelSize);
-
-        // make sure we're in bounds
-        if (gx < 0 || gx >= w || gy < 0 || gy >= h) {
-            return;
-        }
-
         // Db
-        var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
-        if(pixel) {
+        if (pixel) {
           colorPixel = "green";
           PixelBoardsCollection.update(
             pixel._id,
@@ -86,7 +83,35 @@ function PixelBoards ()
         if (grid[gy] && grid[gy][gx]) {
           grid[gy][gx] = colorPixel;
         }
+      } else if(event.which == 3) { // Mouse right
+        if (pixel) {
+          PixelBoardsCollection.remove({'_id': pixel._id});
+          if (grid[gy] && grid[gy][gx]) {
+            grid[gy][gx] = self.defaultColorPixel;
+          }
+        }
+      }
+
+      return false;
     });
+  }
+
+  this.getPixelIndexes = function(e)
+  {
+    // get mouse click position
+    var mx = e.pageX;
+    var my = e.pageY;
+
+    // calculate grid square numbers
+    var gx = ~~ (mx / pixelSize);
+    var gy = ~~ (my / pixelSize);
+
+    // make sure we're in bounds
+    if (gx < 0 || gx >= w || gy < 0 || gy >= h) {
+        return;
+    }
+
+    return [gx, gy];
   }
 
   // Set up listeners for the draw method
