@@ -8,6 +8,7 @@ body {
     -moz-user-select: none;
     -o-user-select: none;
     user-select: none;
+    background-color: #CCC;
 }
 
 /* Loader */
@@ -15,7 +16,7 @@ body {
     position: absolute;
     right: 10px;
     z-index: 60;
-    background: url('loading.gif');
+    background: url('/loading.gif');
     height: 64px;
     width: 64px;
 }

@@ -59,8 +59,8 @@ function PixelBoards ()
       var gy = positions[1];
       var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
-      if (event.which == 1) { // Mouse left
-        var colorPixel = "black";
+      if (e.which == 1) { // Mouse left
+        var colorPixel = $('.colorCanvasInput').css('background-color');
 
         // quick fill function to save repeating myself later
         function fill(s, gx, gy) {
@@ -82,7 +82,7 @@ function PixelBoards ()
         if (grid[gy] && grid[gy][gx]) {
           grid[gy][gx] = colorPixel;
         }
-      } else if(event.which == 3) { // Mouse right
+      } else if(e.which == 3) { // Mouse right
         if (pixel) {
           PixelBoardsCollection.remove({'_id': pixel._id});
           if (grid[gy] && grid[gy][gx]) {
@@ -120,13 +120,13 @@ function PixelBoards ()
     Deps.autorun(function()
     {
       var pixels = PixelBoardsCollection.find({});
+      self.resetGrid();
 
       _.each(pixels.fetch(), function(item) {
         grid[item.y][item.x] = item.color; // Trigger the redraw
       });
 
       if(pixels.count() == 0) {
-        self.resetGrid();
         self.canvasGrid.draw();
       }
 

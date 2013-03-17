@@ -1378,11 +1378,11 @@ window.tinycolor = tinycolor;
     }
     (function() {
       (function() {
-      
+
         __out.push('<div class="controls">\n  <form>\n    <label>\n      <span>R</span>\n      <input type="number" min="0" max="255" name="r" required autofocus>\n    </label>\n\n    <label>\n      <span>G</span>\n      <input type="number" min="0" max="255" name="g" required>\n    </label>\n\n    <label>\n      <span>B</span>\n      <input type="number" min="0" max="255" name="b" required>\n    </label>\n\n    <label>\n      <span>A</span>\n      <input type="number" min="0" max="100" step="1" name="a">%\n    </label>\n\n    <label>\n      <span>Hex</span>\n      <input type="text" name="hex">\n    </label>\n\n    <div class="preview">\n      <div class="inner">\n        &nbsp;\n      </div>\n      <div class="original">\n        &nbsp;\n      </div>\n    </div>\n\n    <footer>\n      <button data-type="cancel">Cancel</button>\n      <button data-type="save" class="right">Save</button>\n    </footer>\n  </form>\n</div>\n');
-      
+
       }).call(this);
-      
+
     }).call(__obj);
     __obj.safe = __objSafe, __obj.escape = __escape;
     return __out.join('');
