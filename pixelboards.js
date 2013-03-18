@@ -84,7 +84,12 @@ function PixelBoards ()
         }
       } else if(e.which == 3) { // Mouse right
         if (pixel) {
-          PixelBoardsCollection.remove({'_id': pixel._id});
+          PixelBoardsCollection.update(
+            pixel._id,
+            {$set: {color : self.defaultColorPixel}}
+          );
+          // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
+          // PixelBoardsCollection.remove({'_id': pixel._id});
           if (grid[gy] && grid[gy][gx]) {
             grid[gy][gx] = self.defaultColorPixel;
           }
@@ -120,13 +125,13 @@ function PixelBoards ()
     Deps.autorun(function()
     {
       var pixels = PixelBoardsCollection.find({});
-      self.resetGrid();
 
       _.each(pixels.fetch(), function(item) {
         grid[item.y][item.x] = item.color; // Trigger the redraw
       });
 
       if(pixels.count() == 0) {
+        self.resetGrid();
         self.canvasGrid.draw();
       }
 
