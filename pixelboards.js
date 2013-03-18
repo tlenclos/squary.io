@@ -29,8 +29,6 @@ function PixelBoards ()
     h = ~~ (canvas.height / pixelSize);
 
     this.resetGrid();
-
-    this.canvasGrid = new canvasGrid("canvasboard", grid, pixelSize, pixelSize);
   }
 
   // Start | Reset the grid
@@ -132,11 +130,37 @@ function PixelBoards ()
 
       if(pixels.count() == 0) {
         self.resetGrid();
-        self.canvasGrid.draw();
       }
 
       $('#loader').hide('slow');
+
+      self.draw();
     });
+  }
+
+  this.draw = function draw() {
+      var mHeight = grid.length;
+      var mWidth = matrixWidth();
+      var cellHeight = pixelSize || canvas.height / mHeight;
+      var cellWidth = pixelSize || canvas.width / mWidth;
+
+      for(var i in grid)
+      {
+          for (var j in grid[i])
+          {
+              ctx.fillStyle = grid[i][j];
+              ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+          }
+      }
+  }
+
+  function matrixWidth() {
+      var w = 0;
+      for (var i in grid) {
+          if(w < grid[i].length)
+              w = grid[i].length;
+      };
+      return w;
   }
 }
 
