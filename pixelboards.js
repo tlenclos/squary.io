@@ -60,12 +60,6 @@ function PixelBoards ()
       if (e.which == 1) { // Mouse left
         var colorPixel = $('.colorCanvasInput').css('background-color');
 
-        // quick fill function to save repeating myself later
-        function fill(s, gx, gy) {
-            ctx.fillStyle = s;
-            ctx.fillRect(gx * pixelSize, gy * pixelSize, pixelSize, pixelSize);
-        }
-
         // Db
         if (pixel) {
           PixelBoardsCollection.update(
@@ -128,7 +122,7 @@ function PixelBoards ()
         grid[item.y][item.x] = item.color; // Trigger the redraw
       });
 
-      if(pixels.count() == 0) {
+      if (pixels.count() == 0) {
         self.resetGrid();
       }
 
@@ -138,16 +132,14 @@ function PixelBoards ()
     });
   }
 
-  this.draw = function draw() {
+  this.draw = function() {
       var mHeight = grid.length;
       var mWidth = matrixWidth();
       var cellHeight = pixelSize || canvas.height / mHeight;
       var cellWidth = pixelSize || canvas.width / mWidth;
 
-      for(var i in grid)
-      {
-          for (var j in grid[i])
-          {
+      for (var i in grid) {
+          for (var j in grid[i]) {
               ctx.fillStyle = grid[i][j];
               ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
           }
