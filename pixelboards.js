@@ -16,6 +16,7 @@ function PixelBoards ()
   {
     canvas = document.getElementById('canvasboard');
     ctx    = canvas.getContext('2d');
+    loaded = false;
 
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
@@ -119,6 +120,9 @@ function PixelBoards ()
       var pixels = PixelBoardsCollection.find({});
 
       _.each(pixels.fetch(), function(item) {
+        if(!grid[item.y])
+          grid[item.y] = [];
+
         grid[item.y][item.x] = item.color; // Trigger the redraw
       });
 
@@ -126,9 +130,12 @@ function PixelBoards ()
         self.resetGrid();
       }
 
-      $('#loader').hide('slow');
-
       self.draw();
+
+      if (!loaded) {
+        $('#loader').hide('slow');
+        loaded = true;
+      }
     });
   }
 
