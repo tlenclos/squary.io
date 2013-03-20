@@ -15,12 +15,19 @@ function PixelBoards ()
   this.setup = function()
   {
     canvas = document.getElementById('canvasboard');
+    layer  = document.getElementById('layer');
+
     ctx    = canvas.getContext('2d');
+    ctxLayer = layer.getContext('2d');
     loaded = false;
 
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
+    ctxLayer.canvas.width  = window.innerWidth;
+    ctxLayer.canvas.height = window.innerHeight;
+
     ctx.scale(1, 1);
+    ctxLayer.scale(1, 1);
 
     grid = [];
     pixelSize = 30;
@@ -52,7 +59,16 @@ function PixelBoards ()
        return false;
     });
 
-    $(canvas).mousedown(function(e) {
+    $(layer).mousemove(function(e) {
+      // Layer test
+      var positions = self.getPixelIndexes(e);
+
+      ctxLayer.clearRect(0, 0, ctxLayer.canvas.width, ctxLayer.canvas.height);
+      ctxLayer.fillStyle = '#FFF';
+      ctxLayer.fillRect(positions[0]*pixelSize, positions[1]*pixelSize, pixelSize, pixelSize);
+    });
+
+    $(document).mousedown(function(e) {
       var positions = self.getPixelIndexes(e);
       var gx = positions[0];
       var gy = positions[1];

@@ -40,3 +40,10 @@ body {
     top: 0px;
     left: 0px;
 }
+#layer {
+    opacity: 0.5;
+    z-index: 30;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
