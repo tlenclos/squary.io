@@ -17,7 +17,6 @@
 
   $.colorcanvas.replaceInputs = function() {
     return $('input[type=color]').each(function() {
-      console.log('test2');
       return (new Input).replace(this);
     });
   };
