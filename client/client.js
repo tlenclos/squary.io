@@ -1,4 +1,6 @@
 if (Meteor.isClient) {
+  var firstRun = true;
+
   // This method runs EVERY time the client is opened, which includes page refreshes.
   Meteor.startup(function()
   {
@@ -6,11 +8,13 @@ if (Meteor.isClient) {
     Deps.autorun(function() {
       var isConnected = Meteor.status().connected;
 
-      if (isConnected) {
+      if (isConnected && firstRun) {
         var pixelboards = new PixelBoards();
         pixelboards.setup();
         pixelboards.setupEvents();
         pixelboards.startUpdateListener();
+
+        firstRun = false;
       }
     });
   });

@@ -63,9 +63,11 @@ function PixelBoards ()
       // Layer test
       var positions = self.getPixelIndexes(e);
 
-      ctxLayer.clearRect(0, 0, ctxLayer.canvas.width, ctxLayer.canvas.height);
-      ctxLayer.fillStyle = '#FFF';
-      ctxLayer.fillRect(positions[0]*pixelSize, positions[1]*pixelSize, pixelSize, pixelSize);
+      if (positions) {
+        ctxLayer.clearRect(0, 0, ctxLayer.canvas.width, ctxLayer.canvas.height);
+        ctxLayer.fillStyle = '#FFF';
+        ctxLayer.fillRect(positions[0]*pixelSize, positions[1]*pixelSize, pixelSize, pixelSize);
+      }
     });
 
     $(document).mousedown(function(e) {
