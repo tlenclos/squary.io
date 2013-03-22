@@ -1,4 +1,12 @@
 Meteor.startup(function(){
+    Meteor.publish("pixels", function() {
+        return PixelBoardsCollection.find({});
+    });
+
+    Meteor.publish("users", function() {
+        return OnlineUsersCollection.find({});
+    });
+
     // Online users (from https://github.com/murilopolese/howmanypeoplearelooking)
     OnlineUsersCollection.remove({});
     Meteor.default_server.stream_server.register( Meteor.bindEnvironment( function(socket) {
