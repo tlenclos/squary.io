@@ -32,6 +32,9 @@ body {
 #controls p {
     margin : 0;
 }
+#clean {
+    display: none;
+}
 
 /* Canvas */
 #canvasboard {

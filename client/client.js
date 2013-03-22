@@ -29,4 +29,10 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.drawers.drawers = function () {
+    if(OnlineUsersCollection.find() != undefined) {
+        return OnlineUsersCollection.find().fetch().length;
+    }
+  };
+
 }

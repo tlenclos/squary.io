@@ -1,8 +1,6 @@
 // TODO : Change global variables
-
 // Set up a collection to contain board information. On the server,
 // it is backed by a MongoDB collection named "pixelboards".
-PixelBoardsCollection = new Meteor.Collection("pixelboards");
 
 // Board Class
 function PixelBoards ()
