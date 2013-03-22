@@ -4,7 +4,10 @@ if (Meteor.isClient) {
   // This method runs EVERY time the client is opened, which includes page refreshes.
   Meteor.startup(function()
   {
-    Meteor.subscribe("pixels");
+    Meteor.subscribe("pixels", function() {
+      $('#loader').hide('slow');
+    });
+
     Meteor.subscribe("users");
 
     // TODO : Display a preloader untill connection and data

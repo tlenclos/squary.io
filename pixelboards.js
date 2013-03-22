@@ -17,7 +17,6 @@ function PixelBoards ()
 
     ctx    = canvas.getContext('2d');
     ctxLayer = layer.getContext('2d');
-    loaded = false;
 
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
@@ -147,11 +146,6 @@ function PixelBoards ()
       }
 
       self.draw();
-
-      if (!loaded) {
-        $('#loader').hide('slow');
-        loaded = true;
-      }
     });
   }
 
