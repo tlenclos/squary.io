@@ -37,4 +37,4 @@ Meteor.startup(function(){
     }, function(e) {
         Meteor._debug("Exception from connection registration callback:", e);
     }));
-})
+});
