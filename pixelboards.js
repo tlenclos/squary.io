@@ -1,7 +1,3 @@
-// TODO : Change global variables
-// Set up a collection to contain board information. On the server,
-// it is backed by a MongoDB collection named "pixelboards".
-
 // Board Class
 function PixelBoards ()
 {
@@ -57,52 +53,73 @@ function PixelBoards ()
             var positions = self.getPixelIndexes(e);
 
             if (positions) {
+                var gx = positions[0];
+                var gy = positions[1];
+                var colorPixel = $('.colorCanvasInput').css('background-color');
+
                 ctxLayer.clearRect(0, 0, ctxLayer.canvas.width, ctxLayer.canvas.height);
                 ctxLayer.fillStyle = '#FFF';
-                ctxLayer.fillRect(positions[0]*pixelSize, positions[1]*pixelSize, pixelSize, pixelSize);
+                ctxLayer.fillRect(gx*pixelSize, gy*pixelSize, pixelSize, pixelSize);
+
+                // Draw pixel on mousemove + mouseclick
+                if (e.which == 1) {
+                    var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
+
+                    if (!pixel || (pixel && pixel.color != colorPixel) )  {
+                                        console.log('test');
+                        self.drawPixelAt(pixel, gx, gy, colorPixel);
+                    }
+                }
             }
         });
 
         $(document).mousedown(function(e) {
             var positions = self.getPixelIndexes(e);
-            var gx = positions[0];
-            var gy = positions[1];
-            var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
-            if (e.which == 1) { // Mouse left
-                var colorPixel = $('.colorCanvasInput').css('background-color');
+            if (positions) {
+                var gx = positions[0];
+                var gy = positions[1];
+                var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
-                // Db
-                if (pixel) {
-                    PixelBoardsCollection.update(
-                        pixel._id,
-                        {$set: {color : colorPixel}}
-                    );
-                } else {
-                    PixelBoardsCollection.insert({x: gx, y: gy, color: colorPixel});
-                }
+                if (e.which == 1) { // Mouse left
+                    var colorPixel = $('.colorCanvasInput').css('background-color');
+                    self.drawPixelAt(pixel, gx, gy, colorPixel);
 
-                // Local array
-                if (grid[gy] && grid[gy][gx]) {
-                    grid[gy][gx] = colorPixel;
-                }
-            } else if(e.which == 3) { // Mouse right
-                if (pixel) {
-                    PixelBoardsCollection.update(
-                        pixel._id,
-                        {$set: {color : self.defaultColorPixel}}
-                    );
+                } else if(e.which == 3) { // Mouse right
+                    if (pixel) {
+                        PixelBoardsCollection.update(
+                            pixel._id,
+                            {$set: {color : self.defaultColorPixel}}
+                        );
 
-                    // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
-                    // PixelBoardsCollection.remove({'_id': pixel._id});
-                    if (grid[gy] && grid[gy][gx]) {
-                        grid[gy][gx] = self.defaultColorPixel;
+                        // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
+                        // PixelBoardsCollection.remove({'_id': pixel._id});
+                        if (grid[gy] && grid[gy][gx]) {
+                            grid[gy][gx] = self.defaultColorPixel;
+                        }
                     }
                 }
             }
 
-        return false;
+            return false;
         });
+    }
+
+    this.drawPixelAt = function(pixel, x, y, color) {
+        // Db
+        if (pixel) {
+            PixelBoardsCollection.update(
+            pixel._id,
+            {$set: {color : color}}
+            );
+        } else {
+            PixelBoardsCollection.insert({x: x, y: y, color: color});
+        }
+
+        // Local array
+        if (grid[y] && grid[y][x]) {
+            grid[y][x] = color;
+        }
     }
 
     this.getPixelIndexes = function(e)
