@@ -1,5 +1,5 @@
 // Board Class
-function PixelBoards ()
+PixelBoards = function()
 {
     this.defaultColorPixel = "#CCC";
     var self = this;
@@ -66,7 +66,6 @@ function PixelBoards ()
                     var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
                     if (!pixel || (pixel && pixel.color != colorPixel) )  {
-                                        console.log('test');
                         self.drawPixelAt(pixel, gx, gy, colorPixel);
                     }
                 }
