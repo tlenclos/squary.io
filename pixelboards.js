@@ -2,6 +2,7 @@
 PixelBoards = function()
 {
     this.defaultColorPixel = "#CCC";
+    this.isMouseDown = 0;
     var self = this;
 
     // Set up the canvas element
@@ -48,8 +49,7 @@ PixelBoards = function()
             return false;
         });
 
-        $(layer).mousemove(function(e) {
-            // Layer test
+        $(document).mousemove(function(e) {
             var positions = self.getPixelIndexes(e);
 
             if (positions) {
@@ -61,47 +61,50 @@ PixelBoards = function()
                 ctxLayer.fillStyle = '#FFF';
                 ctxLayer.fillRect(gx*pixelSize, gy*pixelSize, pixelSize, pixelSize);
 
-                // Draw pixel on mousemove + mouseclick
-                if (e.which == 1) {
-                    var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
-
-                    if (!pixel || (pixel && pixel.color != colorPixel) )  {
-                        self.drawPixelAt(pixel, gx, gy, colorPixel);
-                    }
-                }
+                self.clickEvent(e.which, gx, gy);
             }
         });
 
         $(document).mousedown(function(e) {
+            self.isMouseDown = e.which;
             var positions = self.getPixelIndexes(e);
 
             if (positions) {
                 var gx = positions[0];
                 var gy = positions[1];
-                var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
-                if (e.which == 1) { // Mouse left
-                    var colorPixel = $('.colorCanvasInput').css('background-color');
-                    self.drawPixelAt(pixel, gx, gy, colorPixel);
-
-                } else if(e.which == 3) { // Mouse right
-                    if (pixel) {
-                        PixelBoardsCollection.update(
-                            pixel._id,
-                            {$set: {color : self.defaultColorPixel}}
-                        );
-
-                        // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
-                        // PixelBoardsCollection.remove({'_id': pixel._id});
-                        if (grid[gy] && grid[gy][gx]) {
-                            grid[gy][gx] = self.defaultColorPixel;
-                        }
-                    }
-                }
+               self.clickEvent(e.which, gx, gy);
             }
 
             return false;
         });
+
+        $(document).mouseup(function(e) {
+            self.isMouseDown = 0;
+        });
+    }
+
+    this.clickEvent = function(mouseBtn, gx, gy) {
+        var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
+
+        if (self.isMouseDown == 1) { // Mouse left
+            var colorPixel = $('.colorCanvasInput').css('background-color');
+            self.drawPixelAt(pixel, gx, gy, colorPixel);
+
+        } else if(self.isMouseDown == 3) { // Mouse right
+            if (pixel) {
+                PixelBoardsCollection.update(
+                    pixel._id,
+                    {$set: {color : self.defaultColorPixel}}
+                );
+
+                // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
+                // PixelBoardsCollection.remove({'_id': pixel._id});
+                if (grid[gy] && grid[gy][gx]) {
+                    grid[gy][gx] = self.defaultColorPixel;
+                }
+            }
+        }
     }
 
     this.drawPixelAt = function(pixel, x, y, color) {
