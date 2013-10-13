@@ -50,3 +50,8 @@ body {
     top: 0px;
     left: 0px;
 }
+
+/* Fork button */
+a#fork-me img {
+    z-index: 40;
+}
