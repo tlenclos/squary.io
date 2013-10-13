@@ -1,51 +1,61 @@
+'use strict';
+/* jshint unused: vars */
+/* global window */
+/* global Deps */
+/* global $ */
+/* global _ */
+/* global PixelBoardsCollection */
+/* global PixelBoards:true */
+
 // Board Class
-PixelBoards = function()
-{
-    this.defaultColorPixel = "#CCC";
+PixelBoards = function () {
+    this.defaultColorPixel = '#CCC';
     this.isMouseDown = 0;
+    this.grid = [];
+    this.pixelSize = 30;
+    this.canvas = null;
+    this.ctx = null;
+    this.ctxLayer = null;
+    this.w = null;
+    this.h = null;
     var self = this;
 
     // Set up the canvas element
-    this.setup = function()
-    {
-        grid = [];
-        pixelSize = 30;
-        canvas = document.getElementById('canvasboard');
-        layer  = document.getElementById('layer');
+    this.setup = function () {
+        self.canvas = document.getElementById('canvasboard');
+        var layer  = document.getElementById('layer');
 
-        ctx    = canvas.getContext('2d');
-        ctxLayer = layer.getContext('2d');
+        self.ctx = self.canvas.getContext('2d');
+        self.ctxLayer = layer.getContext('2d');
 
-        ctx.canvas.width  = ctxLayer.canvas.width = window.innerWidth;
-        ctx.canvas.height = ctxLayer.canvas.height = window.innerHeight;
+        self.ctx.canvas.width  = self.ctxLayer.canvas.width = window.innerWidth;
+        self.ctx.canvas.height = self.ctxLayer.canvas.height = window.innerHeight;
 
-        ctx.scale(1, 1);
-        ctxLayer.scale(1, 1);
+        self.ctx.scale(1, 1);
+        self.ctxLayer.scale(1, 1);
 
         // how many cells fit on the canvas
-        w = ~~ (canvas.width / pixelSize);
-        h = ~~ (canvas.height / pixelSize);
+        self.w = Math.round(self.canvas.width / self.pixelSize);
+        self.h = Math.round(self.canvas.height / self.pixelSize);
 
         this.resetGrid();
-    }
+    };
 
     // Start | Reset the grid
-    this.resetGrid = function()
-    {
-        for (var i=0; i<h; i++) {
-            for (var j=0; j<w; j++) {
-                if (!grid[i])
-                    grid[i] = [];
+    this.resetGrid = function () {
+        for (var i=0; i<self.h; i++) {
+            for (var j=0; j<self.w; j++) {
+                if (!self.grid[i])
+                    self.grid[i] = [];
 
-                grid[i][j] = '#CCC';
+                self.grid[i][j] = '#CCC';
             }
         }
-    }
+    };
 
     // Events
-    this.setupEvents = function()
-    {
-        $(document).on("contextmenu", function(e) {
+    this.setupEvents = function () {
+        $(document).on('contextmenu', function(e) {
             return false;
         });
 
@@ -55,11 +65,10 @@ PixelBoards = function()
             if (positions) {
                 var gx = positions[0];
                 var gy = positions[1];
-                var colorPixel = $('.colorCanvasInput').css('background-color');
 
-                ctxLayer.clearRect(0, 0, ctxLayer.canvas.width, ctxLayer.canvas.height);
-                ctxLayer.fillStyle = '#FFF';
-                ctxLayer.fillRect(gx*pixelSize, gy*pixelSize, pixelSize, pixelSize);
+                self.ctxLayer.clearRect(0, 0, self.ctxLayer.canvas.width, self.ctxLayer.canvas.height);
+                self.ctxLayer.fillStyle = '#FFF';
+                self.ctxLayer.fillRect(gx*self.pixelSize, gy*self.pixelSize, self.pixelSize, self.pixelSize);
 
                 self.clickEvent(e.which, gx, gy);
             }
@@ -82,7 +91,7 @@ PixelBoards = function()
         $(document).mouseup(function(e) {
             self.isMouseDown = 0;
         });
-    }
+    };
 
     this.clickEvent = function(mouseBtn, gx, gy) {
         var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
@@ -100,12 +109,12 @@ PixelBoards = function()
 
                 // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
                 // PixelBoardsCollection.remove({'_id': pixel._id});
-                if (grid[gy] && grid[gy][gx]) {
-                    grid[gy][gx] = self.defaultColorPixel;
+                if (self.grid[gy] && self.grid[gy][gx]) {
+                    self.grid[gy][gx] = self.defaultColorPixel;
                 }
             }
         }
-    }
+    };
 
     this.drawPixelAt = function(pixel, x, y, color) {
         // Db
@@ -119,73 +128,71 @@ PixelBoards = function()
         }
 
         // Local array
-        if (grid[y] && grid[y][x]) {
-            grid[y][x] = color;
+        if (self.grid[y] && self.grid[y][x]) {
+            self.grid[y][x] = color;
         }
-    }
+    };
 
-    this.getPixelIndexes = function(e)
-    {
+    this.getPixelIndexes = function(e) {
         // get mouse click position
         var mx = e.pageX;
         var my = e.pageY;
 
         // calculate grid square numbers
-        var gx = ~~ (mx / pixelSize);
-        var gy = ~~ (my / pixelSize);
+        var gx = ~~ (mx / self.pixelSize);
+        var gy = ~~ (my / self.pixelSize);
 
         // make sure we're in bounds
-        if (gx < 0 || gx >= w || gy < 0 || gy >= h) {
+        if (gx < 0 || gx >= self.w || gy < 0 || gy >= self.h) {
             return;
         }
 
         return [gx, gy];
-    }
+    };
 
     // Set up listeners for the draw method
-    this.startUpdateListener = function()
-    {
+    this.startUpdateListener = function () {
         // Each time we interact with PixelBoardsCollection this method is call
-        Deps.autorun(function()
+        Deps.autorun(function ()
         {
             var pixels = PixelBoardsCollection.find({});
 
             _.each(pixels.fetch(), function(item) {
-                if(!grid[item.y])
-                    grid[item.y] = [];
+                if(!self.grid[item.y])
+                    self.grid[item.y] = [];
 
-                grid[item.y][item.x] = item.color; // Trigger the redraw
+                self.grid[item.y][item.x] = item.color; // Trigger the redraw
             });
 
-            if (pixels.count() == 0) {
+            if (pixels.count() === 0) {
                 self.resetGrid();
             }
 
             self.draw();
         });
-    }
+    };
 
-    this.draw = function() {
-        var mHeight = grid.length;
+    this.draw = function () {
+        var mHeight = self.grid.length;
         var mWidth = matrixWidth();
-        var cellHeight = pixelSize || canvas.height / mHeight;
-        var cellWidth = pixelSize || canvas.width / mWidth;
+        var cellHeight = self.pixelSize || self.canvas.height / mHeight;
+        var cellWidth = self.pixelSize || self.canvas.width / mWidth;
 
-        for (var i in grid) {
-            for (var j in grid[i]) {
-                ctx.fillStyle = grid[i][j];
-                ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+        for (var i in self.grid) {
+            for (var j in self.grid[i]) {
+                self.ctx.fillStyle = self.grid[i][j];
+                self.ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
             }
         }
-    }
+    };
 
     function matrixWidth() {
         var w = 0;
-        for (var i in grid) {
-            if (w < grid[i].length)
-                w = grid[i].length;
-        };
+        for (var i in self.grid) {
+            if (w < self.grid[i].length)
+                w = self.grid[i].length;
+        }
         return w;
     }
-}
+};
 
