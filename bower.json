@@ -1,0 +1,22 @@
+{
+  "name": "PixelBoards",
+  "version": "0.0.1",
+  "homepage": "https://github.com/tlenclos/PixelBoards",
+  "authors": [
+    "tlenclos <thibzy@gmail.com>"
+  ],
+  "description": "Real time collaborative pixel art drawing.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "randomColor": "~0.1.1"
+  }
+}

@@ -19,10 +19,13 @@
         this.ctxLayer = null;
         this.w = null;
         this.h = null;
+        this.colorPicker = $('.colorCanvasInput');
         var self = this;
 
         // Set up the canvas element
         this.setup = function () {
+            self.colorPicker.css('background-color', randomColor());
+
             self.canvas = document.getElementById('canvasboard');
             var layer  = document.getElementById('layer');
 
@@ -125,7 +128,7 @@
             var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
 
             if (self.isMouseDown == 1) { // Mouse left
-                var colorPixel = $('.colorCanvasInput').css('background-color');
+                var colorPixel = self.colorPicker.css('background-color');
                 self.drawPixelAt(pixel, gx, gy, colorPixel);
 
             } else if(self.isMouseDown == 3) { // Mouse right
