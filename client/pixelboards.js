@@ -56,11 +56,7 @@
 
         // Events
         this.setupEvents = function () {
-            $(document).on('contextmenu', function(e) {
-                return false;
-            });
-
-            $(document).mousemove(function(e) {
+            var onMouseMove = function(e) {
                 var positions = self.getPixelIndexes(e);
 
                 if (positions) {
@@ -73,9 +69,9 @@
 
                     self.clickEvent(e.which, gx, gy);
                 }
-            });
+            };
 
-            $(document).mousedown(function(e) {
+            var onMouseDown = function(e) {
                 self.isMouseDown = e.which;
                 var positions = self.getPixelIndexes(e);
 
@@ -87,11 +83,42 @@
                 }
 
                 return false;
+            };
+
+            var onMouseUp = function(e) {
+                self.isMouseDown = 0;
+            };
+
+            $(document).on('contextmenu', function(e) {
+                return false;
             });
 
-            $(document).mouseup(function(e) {
-                self.isMouseDown = 0;
-            });
+            // Touch events
+            document.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                var touch = e.touches[0];
+                touch.which = 1;
+                onMouseDown(touch);
+            }, false);
+
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                var touch = e.touches[0];
+                touch.which = 1;
+                onMouseMove(touch);
+            }, false);
+
+            document.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                var touch = e.touches[0];
+                touch.which = 0;
+                onMouseMove(touch);
+            }, false);
+
+            // Mouse events
+            $(document).mousemove(onMouseMove);
+            $(document).mousedown(onMouseDown);
+            $(document).mouseup(onMouseUp);
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
