@@ -162,7 +162,7 @@
                     if(!self.grid[item.y])
                         self.grid[item.y] = [];
 
-                    self.grid[item.y][item.x] = item.color; // Trigger the redraw
+                    self.grid[item.y][item.x] = item.color;
                 });
 
                 if (pixels.count() === 0) {
@@ -175,7 +175,7 @@
 
         this.draw = function () {
             var mHeight = self.grid.length;
-            var mWidth = matrixWidth();
+            var mWidth = self.grid[0].length;
             var cellHeight = self.pixelSize || self.canvas.height / mHeight;
             var cellWidth = self.pixelSize || self.canvas.width / mWidth;
 
@@ -186,14 +186,5 @@
                 }
             }
         };
-
-        function matrixWidth() {
-            var w = 0;
-            for (var i in self.grid) {
-                if (w < self.grid[i].length)
-                    w = self.grid[i].length;
-            }
-            return w;
-        }
     };
 }(this));
