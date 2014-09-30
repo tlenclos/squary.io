@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "homepage": "https://github.com/tlenclos/PixelBoards",
   "authors": [
-    "tlenclos <thibzy@gmail.com>"
+    "tlenclos"
   ],
   "description": "Real time collaborative pixel art drawing.",
   "license": "MIT",
