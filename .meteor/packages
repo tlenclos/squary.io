@@ -8,4 +8,5 @@ random
 standard-app-packages
 meteorhacks:kadira
 mizzao:user-status
+iron:router
 
