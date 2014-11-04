@@ -5,7 +5,7 @@
     /* global Deps */
     /* global $ */
     /* global _ */
-    /* global PixelBoardsCollection */
+    /* global PixelsCollection */
     /* global PixelBoards:true */
 
     // Board Class
@@ -125,7 +125,7 @@
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
-            var pixel = PixelBoardsCollection.findOne({x: gx, y: gy});
+            var pixel = PixelsCollection.findOne({x: gx, y: gy});
 
             if (self.isMouseDown == 1) { // Mouse left
                 var colorPixel = self.colorPicker.css('background-color');
@@ -133,13 +133,13 @@
 
             } else if(self.isMouseDown == 3) { // Mouse right
                 if (pixel) {
-                    PixelBoardsCollection.update(
+                    PixelsCollection.update(
                         pixel._id,
                         {$set: {color : self.defaultColorPixel}}
                     );
 
                     // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
-                    // PixelBoardsCollection.remove({'_id': pixel._id});
+                    // PixelsCollection.remove({'_id': pixel._id});
                     if (self.grid[gy] && self.grid[gy][gx]) {
                         self.grid[gy][gx] = self.defaultColorPixel;
                     }
@@ -150,12 +150,12 @@
         this.drawPixelAt = function(pixel, x, y, color) {
             // Db
             if (pixel) {
-                PixelBoardsCollection.update(
+                PixelsCollection.update(
                 pixel._id,
                 {$set: {color : color}}
                 );
             } else {
-                PixelBoardsCollection.insert({x: x, y: y, color: color});
+                PixelsCollection.insert({x: x, y: y, color: color});
             }
 
             // Local array
@@ -183,10 +183,10 @@
 
         // Set up listeners for the draw method
         this.startUpdateListener = function () {
-            // Each time we interact with PixelBoardsCollection this method is call
+            // Each time we interact with PixelsCollection this method is call
             Deps.autorun(function ()
             {
-                var pixels = PixelBoardsCollection.find({});
+                var pixels = PixelsCollection.find({});
 
                 _.each(pixels.fetch(), function(item) {
                     if(!self.grid[item.y])

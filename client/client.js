@@ -12,12 +12,14 @@ if (Meteor.isClient) {
             var isConnected = Meteor.status().connected;
 
             if (isConnected && firstRun) {
-                var pixelboards = new PixelBoards();
-                pixelboards.setup();
-                pixelboards.setupEvents();
-                pixelboards.startUpdateListener();
+                Template.canvas.rendered = function() {
+                    var pixelboards = new PixelBoards();
+                    pixelboards.setup();
+                    pixelboards.setupEvents();
+                    pixelboards.startUpdateListener();
 
-                firstRun = false;
+                    firstRun = false;
+                };
             }
         });
     });
@@ -25,14 +27,18 @@ if (Meteor.isClient) {
     // Templates
     Template.tcontrols.events({
         'click p#clean': function () {
-            var pixels = PixelBoardsCollection.find({}).fetch();
+            var pixels = PixelsCollection.find({}).fetch();
             _.each(pixels, function(item) {
-                PixelBoardsCollection.remove({'_id': item._id});
+                PixelsCollection.remove({'_id': item._id});
             });
         }
     });
 
-    Template.drawers.drawers = function () {
+    Template.tcontrols.rendered = function() {
+        $.colorcanvas.replaceInputs();
+    };
+
+    Template.tcontrols.drawers = function () {
         return UserConnections.find().count();
     };
 }

@@ -1,6 +1,6 @@
 Meteor.startup(function(){
     Meteor.publish("pixels", function() {
-        return PixelBoardsCollection.find({});
+        return PixelsCollection.find({});
     });
 
     Meteor.publish(null, function() {
