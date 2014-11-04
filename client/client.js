@@ -4,7 +4,6 @@ if (Meteor.isClient) {
     // This method runs EVERY time the client is opened, which includes page refreshes.
     Meteor.startup(function()
     {
-        Meteor.subscribe("users");
         Meteor.subscribe("pixels", function() {
             $('#loader').hide('slow');
         });
@@ -34,8 +33,6 @@ if (Meteor.isClient) {
     });
 
     Template.drawers.drawers = function () {
-        if (OnlineUsersCollection.find() != undefined) {
-            return OnlineUsersCollection.find().fetch().length;
-        }
+        return UserConnections.find().count();
     };
 }
