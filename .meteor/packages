@@ -6,4 +6,5 @@
 insecure
 random
 standard-app-packages
-kadira
+meteorhacks:kadira
+
