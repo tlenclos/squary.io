@@ -1,3 +1,11 @@
 <template name="boardsList">
-    List
+    <h2>PixelBoards</h2>
+    <p>Collaborative pixel art drawing.</p>
+
+    <h3>Public boards</h3>
+    <ul>
+    {{#each boards}}
+        <li><a href="{{pathFor 'board'}}">{{ title }}</a></li>
+    {{/each}}
+    </ul>
 </template>

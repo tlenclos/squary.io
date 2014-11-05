@@ -4,15 +4,16 @@ if (Meteor.isClient) {
     // This method runs EVERY time the client is opened, which includes page refreshes.
     Meteor.startup(function()
     {
+        Meteor.subscribe("boards");
         Meteor.subscribe("pixels", function() {
-            $('#loader').hide('slow');
+            $('#loader').hide('slow'); // TODO use loading template with iron router
         });
 
         Deps.autorun(function() {
             var isConnected = Meteor.status().connected;
 
-            if (isConnected && firstRun) {
-                Template.canvas.rendered = function() {
+            if (isConnected && firstRun) { // TODO Still necessary ?
+                Template.board.rendered = function() {
                     var pixelboards = new PixelBoards();
                     pixelboards.setup();
                     pixelboards.setupEvents();
@@ -23,22 +24,4 @@ if (Meteor.isClient) {
             }
         });
     });
-
-    // Templates
-    Template.tcontrols.events({
-        'click p#clean': function () {
-            var pixels = PixelsCollection.find({}).fetch();
-            _.each(pixels, function(item) {
-                PixelsCollection.remove({'_id': item._id});
-            });
-        }
-    });
-
-    Template.tcontrols.rendered = function() {
-        $.colorcanvas.replaceInputs();
-    };
-
-    Template.tcontrols.drawers = function () {
-        return UserConnections.find().count();
-    };
 }

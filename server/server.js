@@ -2,6 +2,9 @@ Meteor.startup(function(){
     Meteor.publish("pixels", function() {
         return PixelsCollection.find({});
     });
+    Meteor.publish("boards", function() {
+        return BoardsCollections.find({});
+    });
 
     Meteor.publish(null, function() {
         return [
