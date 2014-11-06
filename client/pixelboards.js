@@ -9,7 +9,8 @@
     /* global PixelBoards:true */
 
     // Board Class
-    globals.PixelBoards = function () {
+    globals.PixelBoards = function (_boardId) {
+        this.boardId = _boardId;
         this.defaultColorPixel = '#CCC';
         this.isMouseDown = 0;
         this.grid = [];
@@ -42,7 +43,8 @@
             self.w = Math.round(self.canvas.width / self.pixelSize);
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
-            this.resetGrid();
+            this.resetGrid(); // TODO Why a local grid is necessary ?
+            console.log('Opening pixel board '+self.boardId);
         };
 
         // Start | Reset the grid
@@ -125,7 +127,7 @@
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
-            var pixel = PixelsCollection.findOne({x: gx, y: gy});
+            var pixel = PixelsCollection.findOne({x: gx, y: gy, boardId: self.boardId});
 
             if (self.isMouseDown == 1) { // Mouse left
                 var colorPixel = self.colorPicker.css('background-color');
@@ -133,16 +135,7 @@
 
             } else if(self.isMouseDown == 3) { // Mouse right
                 if (pixel) {
-                    PixelsCollection.update(
-                        pixel._id,
-                        {$set: {color : self.defaultColorPixel}}
-                    );
-
-                    // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
-                    // PixelsCollection.remove({'_id': pixel._id});
-                    if (self.grid[gy] && self.grid[gy][gx]) {
-                        self.grid[gy][gx] = self.defaultColorPixel;
-                    }
+                    self.removePixelAt(pixel, gx, gy);
                 }
             }
         };
@@ -155,12 +148,25 @@
                 {$set: {color : color}}
                 );
             } else {
-                PixelsCollection.insert({x: x, y: y, color: color});
+                PixelsCollection.insert({x: x, y: y, color: color, boardId: self.boardId});
             }
 
             // Local array
             if (self.grid[y] && self.grid[y][x]) {
                 self.grid[y][x] = color;
+            }
+        };
+
+        this.removePixelAt = function(pixel, x, y) {
+            PixelsCollection.update(
+                pixel._id,
+                {$set: {color : self.defaultColorPixel}}
+            );
+
+            // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
+            // PixelsCollection.remove({'_id': pixel._id});
+            if (self.grid[y] && self.grid[y][x]) {
+                self.grid[y][x] = self.defaultColorPixel;
             }
         };
 
@@ -186,7 +192,7 @@
             // Each time we interact with PixelsCollection this method is call
             Deps.autorun(function ()
             {
-                var pixels = PixelsCollection.find({});
+                var pixels = PixelsCollection.find({boardId: self.boardId});
 
                 _.each(pixels.fetch(), function(item) {
                     if(!self.grid[item.y])

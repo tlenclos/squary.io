@@ -14,7 +14,7 @@ if (Meteor.isClient) {
 
             if (isConnected && firstRun) { // TODO Still necessary ?
                 Template.board.rendered = function() {
-                    var pixelboards = new PixelBoards();
+                    var pixelboards = new PixelBoards(this.data._id);
                     pixelboards.setup();
                     pixelboards.setupEvents();
                     pixelboards.startUpdateListener();
