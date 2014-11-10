@@ -86,8 +86,6 @@
 
                    self.clickEvent(e.which, gx, gy);
                 }
-
-                return false;
             };
 
             var onMouseUp = function(e) {

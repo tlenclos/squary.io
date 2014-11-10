@@ -14,3 +14,11 @@ Template.controls.rendered = function() {
 Template.controls.drawers = function () {
     return UserConnections.find().count();
 };
+
+Template.controls.events({
+    'change input[name=title]':function(event, context) {
+        var title = event.target.value;
+        BoardsCollections.update(context.data._id, {$set:{title: title}});
+        console.log('Title changed to '+title);
+    }
+});
