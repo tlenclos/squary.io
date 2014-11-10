@@ -13,7 +13,6 @@
         this.boardId = _boardId;
         this.defaultColorPixel = '#CCC';
         this.isMouseDown = 0;
-        this.grid = [];
         this.pixelSize = 30;
         this.canvas = null;
         this.ctx = null;
@@ -43,20 +42,7 @@
             self.w = Math.round(self.canvas.width / self.pixelSize);
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
-            this.resetGrid(); // TODO Why a local grid is necessary ?
             console.log('Opening pixel board '+self.boardId);
-        };
-
-        // Start | Reset the grid
-        this.resetGrid = function () {
-            for (var i=0; i<self.h; i++) {
-                for (var j=0; j<self.w; j++) {
-                    if (!self.grid[i])
-                        self.grid[i] = [];
-
-                    self.grid[i][j] = '#CCC';
-                }
-            }
         };
 
         // Events
@@ -148,11 +134,6 @@
             } else {
                 PixelsCollection.insert({x: x, y: y, color: color, boardId: self.boardId});
             }
-
-            // Local array
-            if (self.grid[y] && self.grid[y][x]) {
-                self.grid[y][x] = color;
-            }
         };
 
         this.removePixelAt = function(pixel, x, y) {
@@ -160,12 +141,6 @@
                 pixel._id,
                 {$set: {color : self.defaultColorPixel}}
             );
-
-            // TODO : Really remove the pixel (problem : how do we remove it from the canvas without x/y data on other clients ?)
-            // PixelsCollection.remove({'_id': pixel._id});
-            if (self.grid[y] && self.grid[y][x]) {
-                self.grid[y][x] = self.defaultColorPixel;
-            }
         };
 
         this.getPixelIndexes = function(e) {
@@ -192,33 +167,15 @@
             {
                 var pixels = PixelsCollection.find({boardId: self.boardId});
 
-                _.each(pixels.fetch(), function(item) {
-                    if(!self.grid[item.y])
-                        self.grid[item.y] = [];
-
-                    self.grid[item.y][item.x] = item.color;
+                _.each(pixels.fetch(), function(pixel) {
+                    self.draw(pixel);
                 });
-
-                if (pixels.count() === 0) {
-                    self.resetGrid();
-                }
-
-                self.draw();
             });
         };
 
-        this.draw = function () {
-            var mHeight = self.grid.length;
-            var mWidth = self.grid[0].length;
-            var cellHeight = self.pixelSize || self.canvas.height / mHeight;
-            var cellWidth = self.pixelSize || self.canvas.width / mWidth;
-
-            for (var i in self.grid) {
-                for (var j in self.grid[i]) {
-                    self.ctx.fillStyle = self.grid[i][j];
-                    self.ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
-                }
-            }
+        this.draw = function (pixel) {
+            self.ctx.fillStyle = pixel.color;
+            self.ctx.fillRect(pixel.x * self.pixelSize, pixel.y * self.pixelSize, self.pixelSize, self.pixelSize);
         };
     };
 }(this));
