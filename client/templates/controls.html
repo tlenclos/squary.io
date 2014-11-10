@@ -9,8 +9,11 @@
         <p>Right click to remove pixel</p>
         <hr />
         <p>Color <input type="color" value="#FF0000"></p>
+
+        {{#if ownBoard}}
         <hr />
-        <p><a href="" id="link-delete-board">[X] Delete board</a></p>
         <p id="clean">Clean board</p>
+        <p><a href="" id="link-delete-board">[X] Delete board</a></p>
+        {{/if}}
     </div>
 </template>
