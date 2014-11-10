@@ -27,7 +27,7 @@
             self.colorPicker.css('background-color', randomColor());
 
             self.canvas = document.getElementById('canvasboard');
-            var layer  = document.getElementById('layer');
+            self.layer  = document.getElementById('layer');
 
             self.ctx = self.canvas.getContext('2d');
             self.ctxLayer = layer.getContext('2d');
@@ -43,6 +43,9 @@
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
             console.log('Opening pixel board '+self.boardId);
+
+            self.setupEvents();
+            self.startUpdateListener();
         };
 
         // Events
@@ -83,21 +86,21 @@
             });
 
             // Touch events
-            document.addEventListener('touchstart', function(e) {
+            self.layer.addEventListener('touchstart', function(e) {
                 e.preventDefault();
                 var touch = e.touches[0];
                 touch.which = 1;
                 onMouseDown(touch);
             }, false);
 
-            document.addEventListener('touchmove', function(e) {
+            self.layer.addEventListener('touchmove', function(e) {
                 e.preventDefault();
                 var touch = e.touches[0];
                 touch.which = 1;
                 onMouseMove(touch);
             }, false);
 
-            document.addEventListener('touchend', function(e) {
+            self.layer.addEventListener('touchend', function(e) {
                 e.preventDefault();
                 var touch = e.touches[0];
                 touch.which = 0;
@@ -105,9 +108,9 @@
             }, false);
 
             // Mouse events
-            $(document).mousemove(onMouseMove);
-            $(document).mousedown(onMouseDown);
-            $(document).mouseup(onMouseUp);
+            $(self.layer).mousemove(onMouseMove);
+            $(self.layer).mousedown(onMouseDown);
+            $(self.layer).mouseup(onMouseUp);
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
@@ -125,7 +128,6 @@
         };
 
         this.drawPixelAt = function(pixel, x, y, color) {
-            // Db
             if (pixel) {
                 PixelsCollection.update(
                 pixel._id,
