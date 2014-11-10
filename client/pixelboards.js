@@ -5,11 +5,11 @@
     /* global Deps */
     /* global $ */
     /* global _ */
-    /* global PixelsCollection */
-    /* global PixelBoards:true */
+    /* global PixelCollection */
+    /* global BoardCollection:true */
 
     // Board Class
-    globals.PixelBoards = function (_boardId) {
+    globals.Pixelboard = function (_boardId) {
         this.boardId = _boardId;
         this.defaultColorPixel = '#CCC';
         this.isMouseDown = 0;
