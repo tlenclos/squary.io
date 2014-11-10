@@ -11,6 +11,10 @@ body {
     background-color: #CCC;
 }
 
+a {
+    text-decoration: none;
+}
+
 /* Loader */
 #loader {
     position: absolute;

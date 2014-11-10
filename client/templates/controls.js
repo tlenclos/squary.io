@@ -16,9 +16,18 @@ Template.controls.drawers = function () {
 };
 
 Template.controls.events({
-    'change input[name=title]':function(event, context) {
+    'change input[name=title]': function(event, context) {
         var title = event.target.value;
         BoardsCollections.update(context.data._id, {$set:{title: title}});
         console.log('Title changed to '+title);
+    },
+    'click #link-delete-board': function(event, context) {
+        event.preventDefault();
+
+        var deleteConfirmed = confirm('Are you sure to delete the board "'+context.data.title+'"');
+        if (deleteConfirmed) {
+            Meteor.call('deleteBoard', context.data._id);
+            Router.go('boardsList');
+        }
     }
 });

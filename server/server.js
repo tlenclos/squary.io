@@ -18,4 +18,15 @@ Meteor.startup(function(){
             }), UserStatus.connections.find()
         ];
     });
+
+    Meteor.methods({
+        deleteBoard: function(id) {
+            check(id, String);
+            PixelsCollection.remove({boardId: id});
+            BoardsCollections.remove({_id: id});
+
+            console.log('Delete board '+id);
+            return true;
+        }
+    })
 });
