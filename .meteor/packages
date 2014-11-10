@@ -9,4 +9,6 @@ standard-app-packages
 meteorhacks:kadira
 mizzao:user-status
 iron:router
-
+accounts-ui
+accounts-google
+accounts-facebook
