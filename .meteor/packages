@@ -12,3 +12,5 @@ iron:router
 accounts-ui
 accounts-google
 accounts-facebook
+reywood:iron-router-ga
+
