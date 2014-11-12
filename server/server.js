@@ -53,11 +53,19 @@ Meteor.startup(function(){
             service: name
         });
 
-        ServiceConfiguration.configurations.insert({
+        var data = {
             service: name,
-            appId: config.clientId,
-            secret: config.secret
-        });
+            secret: config.secret,
+            loginStyle: 'popup'
+        };
+
+        if (name == 'facebook') {
+            data.appId = config.clientId;
+        } else if (name == 'google') {
+            data.clientId = config.clientId;
+        }
+
+        ServiceConfiguration.configurations.insert(data);
     };
 
     if (Meteor.settings.facebook) {
