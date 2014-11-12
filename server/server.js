@@ -42,5 +42,28 @@ Meteor.startup(function(){
 
             return true;
         }
-    })
+    });
+
+    // Configure oauth accounts
+    var configureService = function(name, config) {
+        console.log("Configuring "+name+" oauth");
+
+        // first, remove configuration entry in case service is already configured
+        ServiceConfiguration.configurations.remove({
+            service: name
+        });
+
+        ServiceConfiguration.configurations.insert({
+            service: name,
+            appId: config.clientId,
+            secret: config.secret
+        });
+    };
+
+    if (Meteor.settings.facebook) {
+        configureService("facebook", Meteor.settings.facebook);
+    }
+    if (Meteor.settings.google) {
+        configureService("google", Meteor.settings.google);
+    }
 });

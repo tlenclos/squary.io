@@ -1,0 +1,15 @@
+{
+  "public": {
+    "ga": {
+      "id": "UA-XXXXXX-00"
+    }
+  },
+  "facebook": {
+    "clientId": "clientId",
+    "secret": "secret"
+  },
+  "google": {
+    "clientId": "clientId",
+    "secret": "secret"
+  }
+}
