@@ -6,7 +6,8 @@ Meteor.startup(function(){
         return BoardsCollections.find({});
     });
     Meteor.publish("boardUser", function(boardId) {
-        return Meteor.users.find({boardId: boardId});
+        var board = BoardsCollections.findOne({_id: boardId});
+        return Meteor.users.find({_id: board.userId}, {fields: {_id: 1, profile: 1}});
     });
 
     Meteor.publish(null, function() {

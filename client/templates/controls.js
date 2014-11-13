@@ -7,8 +7,12 @@ Template.controls.helpers({
         return this.userId === Meteor.userId();
     },
     drawers: function () {
-    return UserConnections.find().count();
-}
+        return UserConnections.find().count();
+    },
+    owner: function() {
+        var user = Meteor.users.findOne({_id: this.userId});
+        return user.profile.name;
+    }
 })
 
 Template.controls.events({
