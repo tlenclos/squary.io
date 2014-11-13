@@ -4,7 +4,6 @@ Template.controls.rendered = function() {
 
 Template.controls.helpers({
     ownBoard: function() {
-        console.log(this.userId);
         return this.userId === Meteor.userId();
     },
     drawers: function () {

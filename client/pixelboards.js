@@ -9,8 +9,9 @@
     /* global BoardCollection:true */
 
     // Board Class
-    globals.Pixelboard = function (_boardId) {
+    globals.Pixelboard = function (_boardId, _ownerId) {
         this.boardId = _boardId;
+        this.ownerId = _ownerId;
         this.defaultColorPixel = '#CCC';
         this.isMouseDown = 0;
         this.pixelSize = 30;
@@ -114,35 +115,26 @@
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
-            var pixel = PixelsCollection.findOne({x: gx, y: gy, boardId: self.boardId});
-
             if (self.isMouseDown == 1) { // Mouse left
                 var colorPixel = self.colorPicker.css('background-color');
-                self.drawPixelAt(pixel, gx, gy, colorPixel);
-
+                self.drawPixelAt(gx, gy, colorPixel);
             } else if(self.isMouseDown == 3) { // Mouse right
-                if (pixel) {
-                    self.removePixelAt(pixel, gx, gy);
-                }
+                self.removePixelAt(gx, gy);
             }
         };
 
-        this.drawPixelAt = function(pixel, x, y, color) {
-            if (pixel) {
-                PixelsCollection.update(
-                pixel._id,
-                {$set: {color : color}}
-                );
-            } else {
-                PixelsCollection.insert({x: x, y: y, color: color, boardId: self.boardId});
-            }
+        this.drawPixelAt = function(x, y, color) {
+            Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
+                if (error)
+                    console.log(error); // TODO Add flash messages
+            });
         };
 
-        this.removePixelAt = function(pixel, x, y) {
-            PixelsCollection.update(
-                pixel._id,
-                {$set: {color : self.defaultColorPixel}}
-            );
+        this.removePixelAt = function(x, y) {
+            Meteor.call('removePixel', {x:x, y:y, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
+                if (error)
+                    console.log(error); // TODO Add flash messages
+            });
         };
 
         this.getPixelIndexes = function(e) {
@@ -168,6 +160,10 @@
             Deps.autorun(function ()
             {
                 var pixels = PixelsCollection.find({boardId: self.boardId});
+
+                // Reset canvas display
+                self.ctx.fillStyle = self.defaultColorPixel;
+                self.ctx.fillRect(0, 0, self.ctx.canvas.width, self.ctx.canvas.height);
 
                 _.each(pixels.fetch(), function(pixel) {
                     self.draw(pixel);
