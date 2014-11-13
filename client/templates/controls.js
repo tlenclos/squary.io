@@ -12,6 +12,9 @@ Template.controls.helpers({
     owner: function() {
         var user = Meteor.users.findOne({_id: this.userId});
         return user.profile.name;
+    },
+    message: function() {
+        return Session.get('message');
     }
 });
 

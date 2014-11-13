@@ -125,15 +125,17 @@
 
         this.drawPixelAt = function(x, y, color) {
             Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
-                if (error)
-                    console.log(error); // TODO Add flash messages
+                if (error) {
+                    Session.set('message', error.reason);
+                }
             });
         };
 
         this.removePixelAt = function(x, y) {
             Meteor.call('removePixel', {x:x, y:y, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
-                if (error)
-                    console.log(error); // TODO Add flash messages
+                if (error) {
+                    Session.set('message', error.reason);
+                }
             });
         };
 

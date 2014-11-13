@@ -19,5 +19,10 @@
         <p id="clean">Clean board</p>
         <p><a href="" id="link-delete-board">[X] Delete board</a></p>
         {{/if}}
+
+        {{#if message}}
+            <hr />
+            <p class="message error">{{message}}.</p>
+        {{/if}}
     </div>
 </template>

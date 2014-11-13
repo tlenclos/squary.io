@@ -35,6 +35,7 @@ a {
     border : 2px solid black;
     padding : 10px;
     background-color : white;
+    width: 210px;
 }
 #controls input[type=text] {
     width: 100%;
@@ -49,6 +50,9 @@ a {
 }
 .colorCanvasInput {
     display: inline-block;
+}
+.error {
+    color: red;
 }
 
 /* Canvas */
