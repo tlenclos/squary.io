@@ -13,7 +13,7 @@ Template.controls.helpers({
         var user = Meteor.users.findOne({_id: this.userId});
         return user.profile.name;
     }
-})
+});
 
 Template.controls.events({
     'click p#clean': function () {
