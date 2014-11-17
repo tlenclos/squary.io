@@ -16,4 +16,5 @@ service-configuration
 percolatestudio:synced-cron
 http
 showdown
+meteorhacks:fast-render
 
