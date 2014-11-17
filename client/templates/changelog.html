@@ -1,0 +1,7 @@
+<template name="changelog">
+    {{#if getChangelogMarkdown}}
+        {{#markdown}}{{getChangelogMarkdown}}{{/markdown}}
+    {{else}}
+        Loading changelog...
+    {{/if}}
+</template>

@@ -1,28 +1,40 @@
+// Methods
+Meteor.methods({
+    getChangelog: function() {
+        var url = "https://raw.githubusercontent.com/tlenclos/Pixelboard/master/CHANGELOG.md";
+        return HTTP.get(url);
+    }
+});
+
+
+// Pub / sub
+Meteor.publish("pixels", function() {
+    return PixelsCollection.find({});
+});
+Meteor.publish("boards", function() {
+    return BoardsCollections.find({});
+});
+Meteor.publish("boardUser", function(boardId) {
+    var board = BoardsCollections.findOne({_id: boardId});
+    return Meteor.users.find({_id: board.userId}, {fields: {_id: 1, profile: 1}});
+});
+
+Meteor.publish(null, function() {
+    return [
+        Meteor.users.find({
+            "status.online": true
+        }, {
+            fields: {
+                status: 1,
+                username: 1
+            }
+        }), UserStatus.connections.find()
+    ];
+});
+
+
+// Startup work
 Meteor.startup(function(){
-    Meteor.publish("pixels", function() {
-        return PixelsCollection.find({});
-    });
-    Meteor.publish("boards", function() {
-        return BoardsCollections.find({});
-    });
-    Meteor.publish("boardUser", function(boardId) {
-        var board = BoardsCollections.findOne({_id: boardId});
-        return Meteor.users.find({_id: board.userId}, {fields: {_id: 1, profile: 1}});
-    });
-
-    Meteor.publish(null, function() {
-        return [
-            Meteor.users.find({
-                "status.online": true
-            }, {
-                fields: {
-                    status: 1,
-                    username: 1
-                }
-            }), UserStatus.connections.find()
-        ];
-    });
-
     // Configure oauth accounts
     var configureService = function(name, config) {
         console.log("Configuring "+name+" oauth");
