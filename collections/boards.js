@@ -11,12 +11,7 @@ BoardsCollections.allow({
 Meteor.methods({
     createBoard: function() {
         var userId = Meteor.userId();
-        if (!userId) {
-            throw new Meteor.Error(401, 'Please login before creating a board.');
-        }
-
-        return BoardsCollections.insert({title: 'My pixel art', userId: userId});;
-
+        return BoardsCollections.insert({title: 'My pixel art', userId: userId});
     },
     deleteBoard: function(id) {
         check(id, String);
