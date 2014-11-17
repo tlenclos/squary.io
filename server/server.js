@@ -53,4 +53,23 @@ Meteor.startup(function(){
     if (Meteor.settings.google) {
         configureService("google", Meteor.settings.google);
     }
+
+    // Cronjobs
+    SyncedCron.add({
+        name: 'Clear boards not linked to a user',
+        schedule: function(parser) {
+            return parser.text('at 01:00 am');
+        },
+        job: function() {
+            var boardsWithoutUser = BoardsCollections.find({userId: null}).fetch();
+            _.each(boardsWithoutUser, function(board) {
+                PixelsCollection.remove({boardId: board._id});
+                BoardsCollections.remove({_id: board._id});
+            });
+
+            return true;
+        }
+    });
+
+    SyncedCron.start();
 });

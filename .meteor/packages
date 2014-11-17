@@ -13,3 +13,5 @@ accounts-google
 accounts-facebook
 reywood:iron-router-ga
 service-configuration
+percolatestudio:synced-cron
+

@@ -11,7 +11,7 @@ Template.controls.helpers({
     },
     owner: function() {
         var user = Meteor.users.findOne({_id: this.userId});
-        return user ? user.profile.name : 'Anonymous';
+        return user ? user.profile.name : false;
     },
     message: function() {
         return Session.get('message');

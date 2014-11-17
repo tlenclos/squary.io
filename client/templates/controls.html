@@ -2,18 +2,27 @@
     <div id="controls">
         <p><a href="/">Board list</a></p>
         <hr />
+
         {{> loginButtons}}
         <hr />
+
         <p><input type="text" value="{{title}}" name="title" /></p>
         <hr />
-        By <strong>{{owner}}</strong>
+
+        {{#if owner}}
+            By <strong>{{owner}}</strong>
+        {{else}}
+            <p class="message warning">This board has no owner, it will be deleted tonight. Please login to save your board.</p>
+        {{/if}}
         <hr />
+
         <p class="drawers">{{drawers}} drawers online</p>
         <hr />
+
         <p>Right click to remove pixel</p>
         <hr />
-        <p>Color <input type="color" value="#FF0000"></p>
 
+        <p>Color <input type="color" value="#FF0000"></p>
         {{#if ownBoard}}
         <hr />
         <p id="clean">Clean board</p>
