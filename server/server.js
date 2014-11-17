@@ -8,8 +8,8 @@ Meteor.methods({
 
 
 // Pub / sub
-Meteor.publish("pixels", function() {
-    return PixelsCollection.find({});
+Meteor.publish("pixels", function(boardId) {
+    return PixelsCollection.find({boardId: boardId});
 });
 Meteor.publish("boards", function() {
     return BoardsCollections.find({}, {sort: {createdAt: -1}});
