@@ -11,7 +11,7 @@ BoardsCollections.allow({
 Meteor.methods({
     createBoard: function() {
         var userId = Meteor.userId();
-        return BoardsCollections.insert({title: 'My pixel art', userId: userId});
+        return BoardsCollections.insert({title: 'My pixel art', userId: userId, createdAt: new Date()});
     },
     deleteBoard: function(id) {
         check(id, String);

@@ -12,7 +12,10 @@ Meteor.publish("pixels", function() {
     return PixelsCollection.find({});
 });
 Meteor.publish("boards", function() {
-    return BoardsCollections.find({});
+    return BoardsCollections.find({}, {sort: {createdAt: -1}});
+});
+Meteor.publish("board", function(boardId) {
+    return BoardsCollections.find({_id: boardId});
 });
 Meteor.publish("boardUser", function(boardId) {
     var board = BoardsCollections.findOne({_id: boardId});
