@@ -22,7 +22,7 @@ Meteor.publish("boardUser", function(boardId) {
     return Meteor.users.find({_id: board.userId}, {fields: {_id: 1, profile: 1}});
 });
 
-Meteor.publish(null, function() {
+Meteor.publish('onlineUsers', function() {
     return [
         Meteor.users.find({
             "status.online": true
