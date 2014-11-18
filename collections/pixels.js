@@ -11,8 +11,6 @@ var validateBoardUser = function(ownerId) {
 
 Meteor.methods({
     addPixel: function(attributes) {
-        console.log(attributes);
-
         check(attributes, {
             x: Match.Integer,
             y: Match.Integer,
