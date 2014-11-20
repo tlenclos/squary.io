@@ -40,8 +40,8 @@ Meteor.publish('onlineUsers', function() {
 Meteor.startup(function(){
     // Mongo indexes
     console.log('Ensure index mongo DB');
-    PixelsCollection._ensureIndex({ boardId:1});
-    PixelsCollection._ensureIndex({x:1, y:1, boardId:1}, {unique: 1});
+    PixelsCollection._ensureIndex({ boardId:1}, {dropDups: true});
+    PixelsCollection._ensureIndex({x:1, y:1, boardId:1}, {unique: 1, dropDups: true});
 
     // Configure oauth accounts
     var configureService = function(name, config) {
