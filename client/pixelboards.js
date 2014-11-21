@@ -21,6 +21,12 @@
         this.w = null;
         this.h = null;
         this.colorPicker = $('.colorCanvasInput');
+        this.actionsType = [
+            'addPixel',
+            'removePixel',
+            'updatePixel'
+        ];
+        this.history = new History();
         var self = this;
 
         // Set up the canvas element
@@ -112,6 +118,33 @@
             $(self.layer).mousemove(onMouseMove);
             $(self.layer).mousedown(onMouseDown);
             $(self.layer).mouseup(onMouseUp);
+
+            // Keyboards event
+            Mousetrap.bind(['mod+z'], function(e) {
+                e.preventDefault();
+                var lastAction = self.history.previous();
+
+                // Rollback last action
+                if (lastAction) {
+                    switch (lastAction.action) {
+                        case 'addPixel':
+                            self.removePixelAt(lastAction.object.x, lastAction.object.y, false);
+                            break;
+                        case 'removePixel':
+                            self.drawPixelAt(lastAction.object.x, lastAction.object.y, lastAction.object.color, false);
+                            break;
+                        case 'updatePixel':
+                            console.log('revert updatePixel');
+                            self.drawPixelAt(lastAction.object.x, lastAction.object.y, lastAction.object.color, false);
+                            break;
+                    }
+                }
+            });
+
+            Mousetrap.bind(['mod+shift+z', 'mod+y'], function(e) {
+                e.preventDefault();
+                console.log('Not implemented yet, sorry.');
+            });
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
@@ -123,24 +156,43 @@
             }
         };
 
-        this.drawPixelAt = function(x, y, color) {
-            if (PixelsCollection.findOne({x:x, y:y, color: color, boardId: self.boardId}))
+        this.drawPixelAt = function(x, y, color, addToHistory) {
+            addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
+            var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
+
+            if (pixel && pixel.color == color)
                 return;
 
             Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
                     Session.set('message', error.reason);
+                } else if (addToHistory) {
+                    var colorHistory = pixel ? pixel.color : color;
+                    var actionType = pixel ? self.actionsType[2] : self.actionsType[0];
+
+                    self.history.add(
+                        actionType,
+                        {x: x, y:y, color: colorHistory, boardId: self.boardId}
+                    );
                 }
             });
         };
 
-        this.removePixelAt = function(x, y) {
-            if (!PixelsCollection.findOne({x:x, y:y, boardId: self.boardId}))
+        this.removePixelAt = function(x, y, addToHistory) {
+            addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
+            var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
+
+            if (!pixel)
                 return;
 
             Meteor.call('removePixel', {x:x, y:y, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
                     Session.set('message', error.reason);
+                } else if (addToHistory) {
+                    self.history.add(
+                        self.actionsType[1],
+                        {x: x, y:y, boardId: self.boardId, color: pixel.color}
+                    );
                 }
             });
         };
