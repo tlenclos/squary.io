@@ -1,6 +1,6 @@
 Template.boardsList.helpers({
     boards: function() {
-        return BoardsCollections.find();
+        return BoardsCollections.find({}, {sort: {createdAt: -1}});
     }
 });
 
