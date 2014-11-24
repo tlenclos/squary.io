@@ -1,3 +1,9 @@
+0.1.3 - 2014-11-24
+=====================
+Features:
+
+  * History: User can undo (ctrl+z) and redo (ctrl+y / ctrl+maj+z) actions
+
 0.1.2 - 2014-11-18
 =====================
 Improvements:
