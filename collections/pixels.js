@@ -29,8 +29,6 @@ Meteor.methods({
             },
             {$set: {color : attributes.color, x: attributes.x, y: attributes.y, boardId: attributes.boardId}}
         );
-
-        console.log('Created pixel '+attributes.x+':'+attributes.y+' - '+new Date()); // TODO Display log only in dev mode
     },
     removePixel: function(attributes) {
         check(attributes, {
@@ -43,7 +41,5 @@ Meteor.methods({
         validateBoardUser(attributes.ownerId);
 
         var deleted = PixelsCollection.remove({x: attributes.x, y: attributes.y, boardId: attributes.boardId});
-
-        console.log('Deleted pixels ('+deleted+')'+new Date());
     }
 });

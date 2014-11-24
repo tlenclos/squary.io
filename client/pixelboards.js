@@ -122,29 +122,57 @@
             // Keyboards event
             Mousetrap.bind(['mod+z'], function(e) {
                 e.preventDefault();
-                var lastAction = self.history.previous();
-
-                // Rollback last action
-                if (lastAction) {
-                    switch (lastAction.action) {
-                        case 'addPixel':
-                            self.removePixelAt(lastAction.object.x, lastAction.object.y, false);
-                            break;
-                        case 'removePixel':
-                            self.drawPixelAt(lastAction.object.x, lastAction.object.y, lastAction.object.color, false);
-                            break;
-                        case 'updatePixel':
-                            console.log('revert updatePixel');
-                            self.drawPixelAt(lastAction.object.x, lastAction.object.y, lastAction.object.color, false);
-                            break;
-                    }
-                }
+                self.executeAction(self.history.previous(), true);
             });
 
             Mousetrap.bind(['mod+shift+z', 'mod+y'], function(e) {
                 e.preventDefault();
-                console.log('Not implemented yet, sorry.');
+                self.executeAction(self.history.next());
             });
+        };
+
+        this.getOppositeAction = function(action) {
+            // TODO Check if action is in array of actions
+            var oppositeAction = null;
+            switch (action) {
+                case 'addPixel':
+                    oppositeAction = self.actionsType[1];
+                    break;
+                case 'removePixel':
+                    oppositeAction = self.actionsType[0];
+                    break;
+                case 'updatePixel':
+                    oppositeAction = self.actionsType[2];
+                    break;
+            }
+
+            return oppositeAction;
+        };
+
+        this.executeAction = function(action, opposite) {
+            if (!action)
+                return;
+
+            var actionType = action.action;
+            if (opposite) {
+                actionType = self.getOppositeAction(action.action);
+            }
+
+            console.log(actionType);
+            // TODO Check if action is in array of actions
+            if (actionType) {
+                switch (actionType) {
+                    case 'addPixel':
+                        self.drawPixelAt(action.object.x, action.object.y, action.object.color, false);
+                        break;
+                    case 'removePixel':
+                        self.removePixelAt(action.object.x, action.object.y, false);
+                        break;
+                    case 'updatePixel':
+                        self.drawPixelAt(action.object.x, action.object.y, action.object.color, false);
+                        break;
+                }
+            }
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
