@@ -9,19 +9,18 @@
     globals.History = function () {
         this.current = null;
         this.endHistory = false;
-        this.count = 0;
         var self = this;
 
         this.add = function(_actionType, _object) {
-            self.current = self.count;
+            // Remove history beyond this point
+            this.clearHistoryAfter(self.current);
+            self.current++;
 
             HistoryCollection.insert({
-                index: self.count,
+                index: self.current,
                 action: _actionType,
                 object: _object
             });
-
-            self.count += 1;
         };
 
         this.getCurrentAction = function() {
@@ -34,6 +33,13 @@
 
         this.getNextAction = function() {
             return HistoryCollection.findOne({index: self.current+1});
+        };
+
+        this.clearHistoryAfter = function(index) {
+            var history = HistoryCollection.find({index: {"$gt": self.current}}).fetch();
+            history.forEach(function(item) {
+                HistoryCollection.remove({_id: item._id});
+            });
         };
 
         // Move backward in history
