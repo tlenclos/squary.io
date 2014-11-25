@@ -11,6 +11,7 @@ var validateBoardUser = function(ownerId) {
 
 Meteor.methods({
     addPixel: function(attributes) {
+        this.unblock();
         check(attributes, {
             x: Match.Integer,
             y: Match.Integer,
@@ -31,6 +32,7 @@ Meteor.methods({
         );
     },
     removePixel: function(attributes) {
+        this.unblock();
         check(attributes, {
             x: Match.Integer,
             y: Match.Integer,

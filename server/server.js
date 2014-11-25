@@ -9,12 +9,15 @@ Meteor.methods({
 
 // Pub / sub
 Meteor.publish("pixels", function(boardId) {
+    this.unblock();
     return PixelsCollection.find({boardId: boardId});
 });
 Meteor.publish("boards", function() {
+    this.unblock();
     return BoardsCollections.find({}, {sort: {createdAt: -1}});
 });
-Meteor.publish("board", function(boardId) {
+Meteor.publish("board", function(boardId) { // TODO Merge the user in this subscription
+    this.unblock();
     return BoardsCollections.find({_id: boardId});
 });
 Meteor.publish("boardUser", function(boardId) {
@@ -23,6 +26,7 @@ Meteor.publish("boardUser", function(boardId) {
 });
 
 Meteor.publish('onlineUsers', function() {
+    this.unblock();
     return [
         Meteor.users.find({
             "status.online": true

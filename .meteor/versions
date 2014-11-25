@@ -53,6 +53,7 @@ meteorhacks:fast-render@1.2.1
 meteorhacks:kadira-binary-deps@1.2.0
 meteorhacks:kadira@2.12.1
 meteorhacks:meteorx@1.2.0
+meteorhacks:unblock@1.1.0
 minifiers@1.1.2
 minimongo@1.0.5
 mizzao:timesync@0.2.2
