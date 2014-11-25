@@ -3,19 +3,16 @@
 
     /*
      * History object managing the actions of the user
+     * TODO Refactor after creating some tests
+     * TODO Bug, when we go previous and then next, one call does nothing
      */
     globals.History = function () {
         this.current = null;
-        this.endOfHistory = false;
+        this.endHistory = false;
         this.count = 0;
         var self = this;
 
-        this.getLast = function() {
-            return HistoryCollection.findOne({}, {sort: {index: 1}});
-        };
-
         this.add = function(_actionType, _object) {
-            self.count += 1;
             self.current = self.count;
 
             HistoryCollection.insert({
@@ -23,41 +20,60 @@
                 action: _actionType,
                 object: _object
             });
+
+            self.count += 1;
+        };
+
+        this.getCurrentAction = function() {
+            return HistoryCollection.findOne({index: self.current});
+        };
+
+        this.getPreviousAction = function() {
+            return HistoryCollection.findOne({index: self.current-1});
+        };
+
+        this.getNextAction = function() {
+            return HistoryCollection.findOne({index: self.current+1});
         };
 
         // Move backward in history
         this.previous = function() {
-            var criterias = self.current ? {index: {"$lte": self.current}} : {};
-            var previous = HistoryCollection.find(criterias, {sort: {index: -1}, limit:2}).fetch();
-            if (previous.length == 0)
-                return null;
+            var current = self.getCurrentAction();
+            var previous = self.getPreviousAction();
 
-            self.current = previous.length > 1 ? previous[1].index : previous[0].index;
-
-            // End of history
-            if (previous.length == 1 && self.getLast().index == self.current && self.endOfHistory) {
-                return null;
-            } else if (previous.length == 1 && self.getLast().index == self.current) {
-                self.endOfHistory = true;
-            } else {
-                self.endOfHistory = false;
+            if (self.endHistory == -1) {
+                return;
             }
 
-            return previous[0];
+            if (previous) {
+                self.endHistory = false;
+                self.current = previous.index;
+            } else {
+                self.endHistory = -1;
+                self.current = 0;
+            }
+
+            return current;
         };
 
         // Move forward in history
         this.next = function() {
-            var criterias = self.current ? {index: {"$gt": self.current}} : {};
-            var next = HistoryCollection.find(criterias, {sort: {index: 1}, limit:1}).fetch();
+            var current = self.getCurrentAction();
+            var next = self.getNextAction();
 
-            next = next.length > 0 ? next[0] : null;
-
-            if (next) {
-                self.current = next.index;
+            if (self.endHistory == 1) {
+                return;
             }
 
-            return next;
+            if (next) {
+                self.endHistory = false;
+                self.current = next.index;
+            } else {
+                self.endHistory = 1;
+                self.current = current.index;
+            }
+
+            return current;
         };
     };
 }(this));
