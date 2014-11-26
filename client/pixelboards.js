@@ -169,12 +169,12 @@
             // Keyboards event
             Mousetrap.bind(['mod+z'], function(e) {
                 e.preventDefault();
-                self.executeAction(self.history.previous(), true);
+                self.executeAction(self.history.undo(), true);
             });
 
             Mousetrap.bind(['mod+shift+z', 'mod+y'], function(e) {
                 e.preventDefault();
-                self.executeAction(self.history.next());
+                self.executeAction(self.history.redo());
             });
 
             Mousetrap.bind(['i'], function(e) {

@@ -3,83 +3,39 @@
 
     /*
      * History object managing the actions of the user
-     * TODO Refactor after creating some tests
-     * TODO Bug, when we go previous and then next, one call does nothing
      */
-    globals.History = function () {
-        this.current = null;
-        this.endHistory = false;
+    globals.History = function() {
+        this.done = this.reverted = [];
         var self = this;
 
         this.add = function(_actionType, _object) {
-            // Remove history beyond this point
-            this.clearHistoryAfter(self.current);
-            self.current++;
-
-            HistoryCollection.insert({
-                index: self.current,
+            self.done.push({
                 action: _actionType,
                 object: _object
             });
+
+            // delete anything forward
+            self.reverted = [];
         };
 
-        this.getCurrentAction = function() {
-            return HistoryCollection.findOne({index: self.current});
-        };
+        this.undo = function() {
+            var item = self.done.pop();
 
-        this.getPreviousAction = function() {
-            return HistoryCollection.findOne({index: self.current-1});
-        };
-
-        this.getNextAction = function() {
-            return HistoryCollection.findOne({index: self.current+1});
-        };
-
-        this.clearHistoryAfter = function(index) {
-            var history = HistoryCollection.find({index: {"$gt": self.current}}).fetch();
-            history.forEach(function(item) {
-                HistoryCollection.remove({_id: item._id});
-            });
-        };
-
-        // Move backward in history
-        this.previous = function() {
-            var current = self.getCurrentAction();
-            var previous = self.getPreviousAction();
-
-            if (self.endHistory == -1) {
-                return;
+            if (item) {
+                self.reverted.push(item);
             }
 
-            if (previous) {
-                self.endHistory = false;
-                self.current = previous.index;
-            } else {
-                self.endHistory = -1;
-                self.current = 0;
-            }
-
-            return current;
+            return item;
         };
 
-        // Move forward in history
-        this.next = function() {
-            var current = self.getCurrentAction();
-            var next = self.getNextAction();
+        this.redo = function() {
+            var item = self.reverted.pop();
 
-            if (self.endHistory == 1) {
-                return;
+            if (item) {
+                self.done.push(item);
             }
 
-            if (next) {
-                self.endHistory = false;
-                self.current = next.index;
-            } else {
-                self.endHistory = 1;
-                self.current = current.index;
-            }
-
-            return current;
+            return item;
         };
     };
 }(this));
