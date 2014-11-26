@@ -27,6 +27,21 @@
             'updatePixel'
         ];
         this.history = new History();
+        this.tools = {
+            active: 'brush',
+            brush: {},
+            eyedropper: {
+                dom: $('#control-eyedropper'),
+                activate: function() {
+                    self.layer.style.cursor = 'crosshair';
+                    self.getTool('eyedropper').dom.css('font-weight', 'bold');
+                },
+                desactivate: function() {
+                    self.layer.style.cursor = 'default';
+                    self.getTool('eyedropper').dom.css('font-weight', 'normal');
+                }
+            }
+        };
         var self = this;
 
         // Set up the canvas element
@@ -53,6 +68,38 @@
 
             self.setupEvents();
             self.startUpdateListener();
+        };
+
+        // Tools
+        this.getTool = function(toolName) {
+            return self.tools[toolName];
+        };
+
+        this.setCurrentTool = function(toolName) {
+            if (self.tools[toolName]) {
+                if (typeof self.tools[self.tools.active].desactivate == 'function') {
+                    self.tools[self.tools.active].desactivate();
+                }
+                if (typeof self.tools[toolName].activate == 'function') {
+                    self.tools[toolName].activate();
+                }
+
+                self.tools.active = toolName;
+            }
+        };
+
+        this.isCurrentTool = function(toolName) {
+            return self.tools.active === toolName;
+        };
+
+        this.toggleTool = function(toolName) {
+            if (self.isCurrentTool(toolName)) {
+                self.setCurrentTool('brush');
+                console.log('Tool brush activated');
+            } else {
+                self.setCurrentTool(toolName);
+                console.log('Tool '+toolName+' activated');
+            }
         };
 
         // Events
@@ -129,6 +176,19 @@
                 e.preventDefault();
                 self.executeAction(self.history.next());
             });
+
+            Mousetrap.bind(['i'], function(e) {
+                e.preventDefault();
+                self.toggleTool('eyedropper');
+
+                if (self.isCurrentTool('eyedropper')) {
+                    self.layer.style.cursor = 'crosshair';
+                    self.getTool('eyedropper').dom.css('font-weight', 'bold');
+                } else {
+                    self.layer.style.cursor = 'default';
+                    self.getTool('eyedropper').dom.css('font-weight', 'normal');
+                }
+            });
         };
 
         this.getOppositeAction = function(action) {
@@ -177,14 +237,33 @@
 
         this.clickEvent = function(mouseBtn, gx, gy) {
             if (self.isMouseDown == 1) { // Mouse left
-                var colorPixel = self.colorPicker.css('background-color');
-                self.drawPixelAt(gx, gy, colorPixel);
+                if (self.isCurrentTool('eyedropper')) {
+                    self.pickColor(gx, gy);
+                } else {
+                    var colorPixel = self.colorPicker.css('background-color');
+                    self.drawPixelAt(gx, gy, colorPixel);
+                }
             } else if(self.isMouseDown == 3) { // Mouse right
                 self.removePixelAt(gx, gy);
             }
         };
 
+        this.pickColor = function(x, y) {
+            var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
+
+            if (pixel) {
+                self.colorPicker.css('background-color', pixel.color);
+            } else {
+                self.colorPicker.css('background-color', self.defaultColorPixel);
+            }
+
+            self.setCurrentTool('brush');
+        };
+
         this.drawPixelAt = function(x, y, color, addToHistory) {
+            if (!self.isCurrentTool('brush'))
+                return;
+
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
@@ -207,6 +286,9 @@
         };
 
         this.removePixelAt = function(x, y, addToHistory) {
+            if (!self.isCurrentTool('brush'))
+                return;
+
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
