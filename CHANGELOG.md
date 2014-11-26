@@ -1,3 +1,13 @@
+0.1.4 - 2014-11-26
+=====================
+Features:
+
+  * Eyedropper tool (get a color from a pixel)
+
+Bugfix:
+
+  * Fix history (now similar to photoshop)
+
 0.1.3 - 2014-11-24
 =====================
 Features:
