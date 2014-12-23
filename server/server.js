@@ -21,7 +21,15 @@ Meteor.publish("boards", function(limit) {
         limit: limit
     };
 
-    return BoardsCollections.find({}, options);
+    var boardsCursor = BoardsCollections.find({}, options);
+    var userIds = boardsCursor.map(function (board) {
+        return board.userId;
+    });
+
+    return [
+        boardsCursor,
+        Meteor.users.find({_id: {$in: userIds}})
+    ];
 });
 Meteor.publish("board", function(boardId) { // TODO Merge the user in this subscription
     this.unblock();

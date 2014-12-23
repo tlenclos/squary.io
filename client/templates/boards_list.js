@@ -1,6 +1,19 @@
+Template.boardsList.rendered = function() {
+    var header = new Header(document.getElementById('header-canvas'), document.getElementById('header'));
+    $(window).resize(function() {
+        header.draw();
+    });
+};
+
 Template.boardsList.helpers({
     boards: function() {
         return BoardsCollections.find({}, {sort: {createdAt: -1}});
+    },
+    author: function() {
+        var user = Meteor.users.findOne(this.userId);
+        if (user) {
+            return user.profile.name;
+        }
     }
 });
 
@@ -14,15 +27,5 @@ Template.boardsList.events({
 
             Router.go('board', {_id: result});
         });
-    }
-});
-
-
-Router.route('/board/create', function() {;
-    if (!Meteor.userId()) {
-        alert('Please login first.');
-    } else {
-        var boardId = BoardsCollections.insert({title: 'My pixel art'}); // TODO Unsafe
-        Router.go('board', {_id: boardId});
     }
 });

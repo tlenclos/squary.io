@@ -1,22 +1,39 @@
 <template name="boardsList">
-    <h2>Pixelboard</h2>
-    <p>Collaborative pixel art drawing.</p>
-    <p><a href="" id="createBoard">
-        {{#if currentUser}}
-            Create your own !
-        {{else}}
-            Create a board !
-        {{/if}}
-    </a></p>
-    {{> loginButtons}}
+    <div id="header">
+        <canvas id="header-canvas"></canvas>
+        <div class="row">
+            <div id="titles" class="three columns">
+                <h2>Pixelboard</h2>
+                <h3>Collaborative pixel art</h3>
+            </div>
+            <div id="search" class="three columns">
+                <input type="text" placeholder="Search" /><input type="submit" value="O">
+            </div>
+            <div class="five columns">
+                <nav class="row">
+                    <div class="four columns"><a href="" id="createBoard"><span class="icon">+</span><br />New board</a></div>
+                    <div class="four columns"><a href="#"><span class="icon">+</span><br />{{> loginButtons}}</a></div>
+                    <div class="four columns"><a href="#"><span class="icon">+</span><br />My profile</a></div>
+                </nav>
+            </div>
+        </div>
+    </div>
 
-    <h3>Public boards</h3>
-    <ul>
-    {{#each boards}}
-        <li><a href="{{pathFor 'board'}}">{{ title }}</a></li>
-    {{/each}}
-    </ul>
+    <div id="boards">
+        <p id="sort">Sort by &nbsp;&nbsp;&nbsp;<strong>creation date</strong></p>
 
-    <hr />
-    <p><a href="{{pathFor 'changelog'}}">Changelog</a></p>
+            {{#each boards}}
+                <div class="four columns clearfix">
+                    <div class="board">
+                        <a href="{{pathFor 'board'}}"><img class="u-max-full-width" src="http://placehold.it/600x500/09f.png/fff" /></a>
+                        <p><a class="board-title" href="{{pathFor 'board'}}">{{ title }}</a> <span class="board-state board-open">open</span></p>
+                        <p class="board-meta"><img src="default-avatar.png" />by <a href="#" class="board-author">{{author}}</a> <span class="board-updated">updated 2h ago</span></p>
+                    </div>
+                </div>
+            {{/each}}
+
+            <br class="clear" />
+    </div>
+
+    <footer><a href="{{pathFor 'changelog'}}">Changelog</a> - <a href="https://github.com/tlenclos/Pixelboard">Fork me on github ;)</a></footer>
 </template>
