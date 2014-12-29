@@ -13,7 +13,10 @@
                 <nav class="row">
                     <div class="four columns"><a href="" id="createBoard"><span class="icon">+</span><br />New board</a></div>
                     <div class="four columns"><a href="#"><span class="icon">+</span><br />{{> loginButtons}}</a></div>
+
+                    {{#if loggedIn}}
                     <div class="four columns"><a href="#"><span class="icon">+</span><br />My profile</a></div>
+                    {{/if}}
                 </nav>
             </div>
         </div>
@@ -25,8 +28,16 @@
             {{#each boards}}
                 <div class="four columns clearfix">
                     <div class="board">
-                        <a href="{{pathFor 'board'}}"><img class="u-max-full-width" src="http://placehold.it/600x500/09f.png/fff" /></a>
-                        <p><a class="board-title" href="{{pathFor 'board'}}">{{ title }}</a> <span class="board-state board-open">open</span></p>
+                        <a href="{{pathFor 'board'}}">
+
+                            {{#if thumbnail}}
+                                <img class="u-max-full-width board-thumbnail" src="{{thumbnail}}" />
+                            {{else}}
+                                <span class="no-preview">No preview</span>
+                            {{/if}}
+
+                        </a>
+                        <p class="board-title"><a href="{{pathFor 'board'}}">{{ title }}</a> <span class="board-state board-open">open</span></p>
                         <p class="board-meta"><img src="default-avatar.png" />by <a href="#" class="board-author">{{author}}</a> <span class="board-updated">updated 2h ago</span></p>
                     </div>
                 </div>

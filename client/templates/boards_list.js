@@ -6,6 +6,9 @@ Template.boardsList.rendered = function() {
 };
 
 Template.boardsList.helpers({
+    loggedIn: function() {
+        return Meteor.userId();
+    },
     boards: function() {
         return BoardsCollections.find({}, {sort: {createdAt: -1}});
     },
