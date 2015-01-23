@@ -1,4 +1,4 @@
-PixelBoard
+Squary.io
 ===========
 
 Real time collaborative pixel art drawing.
@@ -11,4 +11,4 @@ Commands
 
 `meteor run --settings local.settings.json`
 
-`meteor deploy dev-pixel-board.meteor.com --settings dist.settings.json`
+`meteor deploy dev-squary.meteor.com --settings dist.settings.json`
