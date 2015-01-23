@@ -1,8 +1,34 @@
+var basePathGeneratedDir = process.env['PWD'] +'/.generated';
+var fs = Npm.require('fs');
+
 var convertToHex = function(value) {
     var val=(value*1).toString(16);
     val=(val.length>1)?val:"0"+val;
     return val;
 };
+
+// Serve generated files
+Router.map(function() {
+    this.route('serverFile', {
+        where: 'server',
+        path: /^\/board_image\/(.*)$/,
+        action: function() {
+            var filePath = process.env.PWD + '/.generated/' + this.params[0];
+
+            try {
+                var data = fs.readFileSync(filePath);
+                this.response.writeHead(200, {
+                    'Content-Type': 'image'
+                });
+                this.response.write(data);
+            } catch (e) {
+                console.error(e);
+            }
+
+            this.response.end();
+        }
+    });
+});
 
 // Methods
 Meteor.methods({
@@ -19,10 +45,8 @@ Meteor.methods({
     },
     encodeBoardImage: function(boardId) {
         var jpedLib = Meteor.npmRequire('jpeg-js');
-        var fs = Npm.require('fs');
         var pixels = PixelsCollection.find({boardId: boardId});
         var height = 0, width = 0;
-        var basePath = Meteor.chroot || (process.env['PWD'] +'/public');
         var pixelsArray = [];
 
         if (pixels.count() > 0) {
@@ -87,7 +111,7 @@ Meteor.methods({
             var jpegImageData = jpedLib.encode(rawImageData, 100);
 
             var imagePath = 'images/board/preview_'+boardId+'.jpg';
-            var fileName = basePath+'/'+imagePath;
+            var fileName = basePathGeneratedDir+'/'+imagePath;
             fs.writeFile(fileName, jpegImageData.data, 'binary', Meteor.bindEnvironment(function(err) {
                 if (err) {
                     console.log(err);
