@@ -242,3 +242,9 @@ footer {
     border-top: 1px solid white;
     text-align: center;
 }
+
+/* Progress indicator */
+#iron-router-progress {
+    background-color : #4A90E2;
+    box-shadow : 0 0 5px grey;
+}

@@ -5,7 +5,8 @@ Router.configure({
     loadingTemplate: 'loading',
     notFoundTemplate: 'notFound',
     trackPageView: true,
-    fastRender: true
+    fastRender: true,
+    progressSpinner: false
 });
 
 Router.route('/', {
