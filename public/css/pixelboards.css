@@ -54,7 +54,7 @@ hr {
     padding-top: 30px;
 }
 #header .row .row {
-    padding-top: 0px;
+    padding-top: 0;
 }
 #header #titles {
     padding-left: 30px;
@@ -226,15 +226,15 @@ hr {
 #canvasboard {
     z-index: 20;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
 }
 #layer {
     opacity: 0.5;
     z-index: 30;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
 }
 
 footer {
