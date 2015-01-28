@@ -2,8 +2,8 @@ var basePathGeneratedDir = process.env['PWD'] +'/.generated';
 var fs = Npm.require('fs');
 
 var convertToHex = function(value) {
-    var val=(value*1).toString(16);
-    val=(val.length>1)?val:"0"+val;
+    var val = (value * 1).toString(16);
+    val = (val.length > 1) ? val : "0" + val;
     return val;
 };
 
@@ -44,7 +44,7 @@ Meteor.methods({
         });
     },
     encodeBoardImage: function(boardId) {
-        var jpedLib = Meteor.npmRequire('jpeg-js');
+        var jpegLib = Meteor.npmRequire('jpeg-js');
         var pixels = PixelsCollection.find({boardId: boardId});
         var height = 0, width = 0;
         var pixelsArray = [];
@@ -108,7 +108,7 @@ Meteor.methods({
                 width: width,
                 height: height
             };
-            var jpegImageData = jpedLib.encode(rawImageData, 100);
+            var jpegImageData = jpegLib.encode(rawImageData, 100);
 
             var imagePath = 'images/board/preview_'+boardId+'.jpg';
             var fileName = basePathGeneratedDir+'/'+imagePath;
@@ -183,7 +183,7 @@ Meteor.startup(function(){
 
     // Configure oauth accounts
     var configureService = function(name, config) {
-        console.log("Configuring "+name+" oauth");
+        console.log("Configuring " + name + " oauth");
 
         // first, remove configuration entry in case service is already configured
         ServiceConfiguration.configurations.remove({

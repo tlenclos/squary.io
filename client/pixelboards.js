@@ -64,7 +64,7 @@
             self.w = Math.round(self.canvas.width / self.pixelSize);
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
-            console.log('Opening pixel board '+self.boardId);
+            console.log('Opening pixel board ' + self.boardId);
 
             self.setupEvents();
             self.startUpdateListener();
@@ -98,7 +98,7 @@
                 console.log('Tool brush activated');
             } else {
                 self.setCurrentTool(toolName);
-                console.log('Tool '+toolName+' activated');
+                console.log('Tool ' + toolName + ' activated');
             }
         };
 
@@ -127,7 +127,7 @@
                     var gx = positions[0];
                     var gy = positions[1];
 
-                   self.clickEvent(e.which, gx, gy);
+                    self.clickEvent(e.which, gx, gy);
                 }
             };
 
@@ -205,7 +205,6 @@
                     oppositeAction = self.actionsType[2];
                     break;
             }
-
             return oppositeAction;
         };
 
