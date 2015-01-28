@@ -12,3 +12,8 @@ Commands
 `meteor run --settings local.settings.json`
 
 `meteor deploy dev-squary.meteor.com --settings dist.settings.json`
+
+Review / Build
+--------
+
+[![Codacy Badge](https://www.codacy.com/project/badge/16c1842467744b5f84807ef9a7d046cb)](https://www.codacy.com/public/thibzy/Pixelboard)
