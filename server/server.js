@@ -196,9 +196,9 @@ Meteor.startup(function(){
             loginStyle: 'popup'
         };
 
-        if (name == 'facebook') {
+        if (name === 'facebook') {
             data.appId = config.clientId;
-        } else if (name == 'google') {
+        } else if (name === 'google') {
             data.clientId = config.clientId;
         }
 

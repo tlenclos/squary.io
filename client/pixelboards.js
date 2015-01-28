@@ -77,10 +77,10 @@
 
         this.setCurrentTool = function(toolName) {
             if (self.tools[toolName]) {
-                if (typeof self.tools[self.tools.active].desactivate == 'function') {
+                if (typeof self.tools[self.tools.active].desactivate === 'function') {
                     self.tools[self.tools.active].desactivate();
                 }
-                if (typeof self.tools[toolName].activate == 'function') {
+                if (typeof self.tools[toolName].activate === 'function') {
                     self.tools[toolName].activate();
                 }
 
@@ -236,14 +236,14 @@
         };
 
         this.clickEvent = function(mouseBtn, gx, gy) {
-            if (self.isMouseDown == 1) { // Mouse left
+            if (self.isMouseDown === 1) { // Mouse left
                 if (self.isCurrentTool('eyedropper')) {
                     self.pickColor(gx, gy);
                 } else {
                     var colorPixel = self.colorPicker.css('background-color');
                     self.drawPixelAt(gx, gy, colorPixel);
                 }
-            } else if(self.isMouseDown == 3) { // Mouse right
+            } else if(self.isMouseDown === 3) { // Mouse right
                 self.removePixelAt(gx, gy);
             }
         };
@@ -267,7 +267,7 @@
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
-            if (pixel && pixel.color == color)
+            if (pixel && pixel.color === color)
                 return;
 
             Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
