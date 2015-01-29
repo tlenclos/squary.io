@@ -1,10 +1,10 @@
 Squary.io
 ===========
 
-Real time collaborative pixel art drawing.
+Real time collaborative pixel art drawing built with [Meteor](https://www.meteor.com).
 You can follow the development on [Trello](https://trello.com/b/BAJoLOTm/squary-io) or the recent changes in [CHANGELOG.md](https://github.com/tlenclos/squary.io/blob/master/CHANGELOG.md).
 
-![Preview](https://raw.githubusercontent.com/tlenclos/Pixelboard/master/preview.gif)
+![Preview](https://raw.githubusercontent.com/tlenclos/squary.io/master/preview.gif)
 
 Install
 -------
