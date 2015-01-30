@@ -1,0 +1,24 @@
+<template name="header">
+    <div id="header">
+        <canvas id="header-canvas"></canvas>
+        <div class="row">
+            <div id="titles" class="three columns">
+                <h2><a href="/">Squary</a></h2>
+                <h3>Collaborative pixel art</h3>
+            </div>
+            <div id="search" class="three columns">
+                <input type="text" placeholder="Search" /><input type="submit" value="O">
+            </div>
+            <div class="five columns">
+                <nav class="row">
+                    <div class="four columns"><a href="" id="createBoard"><span class="icon">+</span><br />New board</a></div>
+                    <div class="four columns"><a href="#"><span class="icon">+</span><br />{{> loginButtons}}</a></div>
+
+                    {{#if loggedIn}}
+                        <div class="four columns"><a href="#"><span class="icon">+</span><br />My profile</a></div>
+                    {{/if}}
+                </nav>
+            </div>
+        </div>
+    </div>
+</template>

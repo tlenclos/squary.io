@@ -43,6 +43,17 @@ hr {
     width: 100%;
     max-width: 100%;
 }
+.content {
+    padding: 20px;
+    width: 50%;
+    margin: auto;
+    background-color: white;
+    margin-top: 5px;
+    height: 100%;
+}
+.content p, .content h1, .content h2 {
+    margin-bottom: 5px;
+}
 
 /* Header */
 #header {
@@ -64,6 +75,9 @@ hr {
     font-size: 48px;
     margin-bottom: 0;
     line-height: 0.8;
+}
+#header h2 a {
+    color: white;
 }
 #header h3 {
     font-size: 16px;
@@ -241,6 +255,12 @@ footer {
     padding: 10px 2%;
     border-top: 1px solid white;
     text-align: center;
+    background-color: #b7b7b7;
+}
+
+footer a {
+    color: black;
+    margin: 0 10px;
 }
 
 /* Progress indicator */

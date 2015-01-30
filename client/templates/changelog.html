@@ -1,7 +1,11 @@
 <template name="changelog">
-    {{#if getChangelogMarkdown}}
-        {{#markdown}}{{getChangelogMarkdown}}{{/markdown}}
-    {{else}}
-        Loading changelog...
-    {{/if}}
+    {{> header }}
+
+    <div class="content">
+        {{#if getChangelogMarkdown}}
+            {{#markdown}}{{getChangelogMarkdown}}{{/markdown}}
+        {{else}}
+            Loading changelog...
+        {{/if}}
+    </div>
 </template>

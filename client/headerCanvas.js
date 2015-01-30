@@ -1,7 +1,7 @@
 (function(globals){
     'use strict';
 
-    globals.Header = function (_canvas, _hoverElement) {
+    globals.headerCanvas = function (_canvas, _hoverElement) {
         this.canvas = _canvas;
         this.hoverElement = _hoverElement;
         this.ctx = _canvas.getContext('2d');
