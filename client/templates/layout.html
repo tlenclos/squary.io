@@ -1,5 +1,30 @@
+<template name="layoutNoWrapper">
+    <div id="layout" class="container">
+        {{> header }}
+
+        {{> yield }}
+
+        {{> footer }}
+    </div>
+</template>
+
 <template name="layout">
     <div id="layout" class="container">
-        {{> yield }}
+        {{> header }}
+
+        <div class="content">
+            {{> yield }}
+            <div class="clear"></div>
+        </div>
+
+        {{> footer }}
     </div>
+</template>
+
+<template name="noLayout">
+    {{> yield }}
+</template>
+
+<template name="footer">
+    <footer><a href="{{pathFor 'changelog'}}">Changelog</a> | <a href="https://github.com/tlenclos/squary.io">Fork me on github</a></footer>
 </template>

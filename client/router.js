@@ -11,10 +11,16 @@ Router.configure({
 
 Router.route('/', {
     name: 'boardsList',
+    layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
         return subscriptions.subscribe('boards');
     }
 });
+
+Router.route('/profile', {
+    name: 'profile'
+});
+
 Router.route('/board/create', function() {;
     if (!Meteor.userId()) {
         alert('Please login first.');
@@ -26,6 +32,7 @@ Router.route('/board/create', function() {;
 
 Router.route('/board/:_id', {
     name: 'board',
+    layoutTemplate: 'noLayout',
     subscriptions: function() {
         return subscriptions.subscribe('boardOwner', this.params._id);
     },
@@ -54,3 +61,20 @@ Router.onBeforeAction(function() {
     this.next();
 });
 Router.onBeforeAction('dataNotFound', {only: 'board'});
+
+// User account routes
+AccountsTemplates.configureRoute('changePwd');
+AccountsTemplates.configureRoute('enrollAccount');
+AccountsTemplates.configureRoute('forgotPwd');
+AccountsTemplates.configureRoute('resetPwd');
+AccountsTemplates.configureRoute('signIn');
+AccountsTemplates.configureRoute('signUp');
+AccountsTemplates.configureRoute('verifyEmail');
+
+AccountsTemplates.configure({
+    showForgotPasswordLink: true,
+    overrideLoginErrors: true,
+    enablePasswordChange: true,
+    sendVerificationEmail: true,
+    enforceEmailVerification: true
+});

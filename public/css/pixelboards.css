@@ -268,3 +268,8 @@ footer a {
     background-color : #4A90E2;
     box-shadow : 0 0 5px grey;
 }
+
+/* Accounts */
+.at-wrap {
+    text-align: left;
+}

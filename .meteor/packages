@@ -25,3 +25,5 @@ meteorhacks:npm
 
 npm-container
 multiply:iron-router-progress
+useraccounts:semantic-ui
+accounts-password
