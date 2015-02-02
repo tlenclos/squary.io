@@ -150,11 +150,14 @@ Meteor.publish("boards", function(limit) {
         Meteor.users.find({_id: {$in: userIds}})
     ];
 });
+Meteor.publish("userBoards", function(userId) {
+    return BoardsCollections.find({userId: userId});
+});
 Meteor.publish("board", function(boardId) { // TODO Merge the user in this subscription
     this.unblock();
     return BoardsCollections.find({_id: boardId});
 });
-Meteor.publish("boardOwner", function(userId) {
+Meteor.publish("user", function(userId) {
     this.unblock();
     return Meteor.users.find({_id: userId}, {fields: {_id: 1, profile: 1}});
 });

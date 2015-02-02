@@ -27,3 +27,5 @@ npm-container
 multiply:iron-router-progress
 useraccounts:semantic-ui
 accounts-password
+aldeed:autoform
+aldeed:collection2

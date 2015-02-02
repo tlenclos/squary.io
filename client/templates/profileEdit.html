@@ -1,0 +1,12 @@
+<template name="profileEdit">
+    <h2>Edit profile</h2>
+
+    {{#autoForm collection="Meteor.users" doc=this id="updateProfileForm" type="update"}}
+        <fieldset>
+            {{> afQuickField name='profile.name'}}
+        </fieldset>
+        <button type="submit" class="btn btn-primary">Save</button>
+    {{/autoForm}}
+
+    {{> atForm state='changePwd'}}
+</template>

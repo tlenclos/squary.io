@@ -14,7 +14,7 @@
                     <div class="four columns"><a href="" id="createBoard"><span class="icon">+</span><br />New board</a></div>
 
                     {{#if loggedIn}}
-                        <div class="four columns"><a href="/profile"><span class="icon">+</span><br />My profile</a></div>
+                        <div class="four columns"><a href="/user/{{loggedUser._id}}"><span class="icon">+</span><br />My profile</a></div>
                     {{else}}
                         <div class="four columns"><a href="/sign-in"><span class="icon">+</span><br />Sign in</a></div>
                     {{/if}}

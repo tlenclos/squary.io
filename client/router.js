@@ -2,7 +2,6 @@ var subscriptions = new SubsManager();
 
 Router.configure({
     layoutTemplate: 'layout',
-    loadingTemplate: 'loading',
     notFoundTemplate: 'notFound',
     trackPageView: true,
     fastRender: true,
@@ -17,8 +16,28 @@ Router.route('/', {
     }
 });
 
-Router.route('/profile', {
-    name: 'profile'
+Router.route('/user/:_id', {
+    name: 'profile',
+    waitOn: function() {
+        return [
+            subscriptions.subscribe('user', this.params._id),
+            subscriptions.subscribe('userBoards', this.params._id),
+        ];
+    },
+    data: function() {
+        return {
+            user: Meteor.users.findOne(this.params._id),
+            userBoards: BoardsCollections.find({userId: this.params._id}),
+            userBoardsCount: BoardsCollections.find({userId: this.params._id}).count()
+        };
+    }
+});
+
+Router.route('/user/:_id/edit', {
+    name: 'profileEdit',
+    data: function() {
+        return Meteor.users.findOne(this.params._id);
+    }
 });
 
 Router.route('/board/create', function() {;
@@ -34,7 +53,7 @@ Router.route('/board/:_id', {
     name: 'board',
     layoutTemplate: 'noLayout',
     subscriptions: function() {
-        return subscriptions.subscribe('boardOwner', this.params._id);
+        return subscriptions.subscribe('user', this.params._id);
     },
     waitOn: function() {
         return subscriptions.subscribe('board', this.params._id);

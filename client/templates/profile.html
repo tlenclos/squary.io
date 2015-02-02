@@ -1,5 +1,29 @@
 <template name="profile">
-    Profile
-    
-    {{> atNavButton}}
+    <h2>{{ user.profile.name }}'s profile {{#if loggedUser }}<a href="{{pathFor 'profileEdit' data=user}}" class="button">Edit</a>{{/if}}</h2>
+
+    {{#if loggedUser }}
+        {{> atNavButton}}
+    {{/if}}
+
+    <h3>{{userBoardsCount}} boards</h3>
+
+    <div id="profileBoards">
+        {{#each userBoards}}
+            <div class="three columns clearfix">
+                <div class="board">
+                    <span class="board-state board-open">open</span>
+                    <a href="{{pathFor 'board'}}">
+
+                        {{#if thumbnail}}
+                            <img class="u-max-full-width board-thumbnail" src="/board_image/{{thumbnail}}" />
+                        {{else}}
+                            <span class="no-preview">No preview</span>
+                        {{/if}}
+
+                    </a>
+                    <p class="board-title"><a href="{{pathFor 'board'}}">{{ title }}</a></p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
 </template>

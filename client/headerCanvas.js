@@ -43,7 +43,7 @@
 
             // Background
             var img     = new Image();
-            img.src     = 'header_bg.jpg';
+            img.src     = '/header_bg.jpg';
 
             img.onload  = function() {
                 // create pattern

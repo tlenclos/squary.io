@@ -15,7 +15,13 @@
 
                         </a>
                         <p class="board-title"><a href="{{pathFor 'board'}}">{{ title }}</a> <span class="board-state board-open">open</span></p>
-                        <p class="board-meta"><img src="default-avatar.png" />by <a href="#" class="board-author">{{author}}</a></p>
+                        <p class="board-meta"><img src="default-avatar.png" />by
+                            {{#if author.profile.name}}
+                                <a href="{{pathFor 'profile' data=author}}" class="board-author">{{author.profile.name}}</a>
+                            {{else}}
+                                Anonymous
+                            {{/if}}
+                        </p>
                     </div>
                 </div>
             {{/each}}
