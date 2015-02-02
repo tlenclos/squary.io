@@ -217,6 +217,10 @@ hr {
     padding: 5px;
     box-sizing: border-box;
 }
+#controls input[type=text]:disabled {
+    border: none;
+}
+
 #controls p {
     margin : 0;
 }
