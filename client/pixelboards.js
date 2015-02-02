@@ -5,8 +5,6 @@
     /* global Deps */
     /* global $ */
     /* global _ */
-    /* global PixelCollection */
-    /* global BoardCollection:true */
 
     // Board Class
     globals.Pixelboard = function (_boardId, _ownerId) {
@@ -209,8 +207,9 @@
         };
 
         this.executeAction = function(action, opposite) {
-            if (!action)
+            if (!action) {
                 return;
+            }
 
             var actionType = action.action;
             if (opposite) {
@@ -260,14 +259,17 @@
         };
 
         this.drawPixelAt = function(x, y, color, addToHistory) {
-            if (!self.isCurrentTool('brush'))
+            if (!self.isCurrentTool('brush')) {
                 return;
+            }
+
 
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
-            if (pixel && pixel.color === color)
+            if (pixel && pixel.color === color) {
                 return;
+            }
 
             Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
@@ -285,14 +287,17 @@
         };
 
         this.removePixelAt = function(x, y, addToHistory) {
-            if (!self.isCurrentTool('brush'))
+            if (!self.isCurrentTool('brush')) {
                 return;
+
+            }
 
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
-            if (!pixel)
+            if (!pixel) {
                 return;
+            }
 
             Meteor.call('removePixel', {x:x, y:y, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
