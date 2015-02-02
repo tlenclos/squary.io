@@ -11,8 +11,9 @@ Template.header.events({
         event.preventDefault();
 
         Meteor.call('createBoard', function(error, result) { // display the error to the user and abort
-            if (error)
+            if (error) {
                 return alert(error.reason);
+            }
 
             Router.go('board', {_id: result});
         });

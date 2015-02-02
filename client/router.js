@@ -65,11 +65,12 @@ Router.route('/board/:_id', {
 
 Router.route('/changelog', function() {
     Meteor.call('getChangelog', function(err, data) {
-        if (err)
+        if (err) {
             console.log(err);
-
-        if (data)
+        }
+        if (data) {
             Session.set('changelog', data.content);
+        }
     });
 
     this.render('changelog');
