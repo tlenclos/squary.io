@@ -13,6 +13,9 @@ Template.controls.helpers({
         var user = Meteor.users.findOne({_id: this.userId});
         return user ? user.profile.name : false;
     },
+    disableTitleEdition: function() {
+        return this.userId === Meteor.userId() ? "false" : "true";
+    },
     message: function() {
         return Session.get('message');
     }
