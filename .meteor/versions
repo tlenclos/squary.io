@@ -102,3 +102,4 @@ useraccounts:core@1.6.1
 useraccounts:semantic-ui@1.6.1
 webapp@1.1.6
 webapp-hashing@1.0.2
+wylio:mandrill@0.2.1

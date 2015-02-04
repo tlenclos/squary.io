@@ -243,4 +243,13 @@ Meteor.startup(function(){
     });
 
     SyncedCron.start();
+
+    // Emails
+    Meteor.Mandrill.config({
+        username: Meteor.settings.mandrillUsername,
+        key: Meteor.settings.mandrillapiKey
+    });
+
+    Accounts.emailTemplates.siteName = "Squary.io";
+    Accounts.emailTemplates.from = "no-replay@squary.io";
 });
