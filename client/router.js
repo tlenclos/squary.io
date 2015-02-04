@@ -2,7 +2,7 @@ var subscriptions = new SubsManager();
 
 Router.configure({
     layoutTemplate: 'layout',
-    notFoundTemplate: 'notFound',
+    notFoundTemplate: 'notfound',
     trackPageView: true,
     fastRender: true,
     progressSpinner: false
@@ -14,6 +14,10 @@ Router.route('/', {
     subscriptions: function() {
         return subscriptions.subscribe('boards');
     }
+});
+
+Router.route('/404', {
+    name: 'notfound'
 });
 
 Router.route('/user/:_id', {
@@ -37,6 +41,13 @@ Router.route('/user/:_id/edit', {
     name: 'profileEdit',
     data: function() {
         return Meteor.users.findOne(this.params._id);
+    },
+    onBeforeAction: function(pause) {
+        AccountsTemplates.ensureSignedIn.call(this, pause);
+
+        if (this.params._id != Meteor.userId()) {
+            this.redirect('notfound');
+        }
     }
 });
 
