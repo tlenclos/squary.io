@@ -17,6 +17,10 @@
     "tests"
   ],
   "dependencies": {
-    "randomColor": "~0.1.1"
+    "randomColor": "~0.1.1",
+    "spectrum": "~1.6.0"
+  },
+  "resolutions": {
+    "randomColor": "~0.2.0"
   }
 }
