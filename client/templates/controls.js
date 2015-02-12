@@ -1,5 +1,12 @@
 Template.controls.rendered = function() {
-    $.colorcanvas.replaceInputs();
+    $("#picker").spectrum({
+        clickoutFiresChange: true,
+        showInput: true,
+        showInitial: true,
+        showAlpha: true,
+        showButtons: false,
+        preferredFormat: "hex"
+    });
 };
 
 Template.controls.helpers({

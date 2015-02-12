@@ -8,6 +8,7 @@
 
     // Board Class
     globals.Pixelboard = function (_boardId, _ownerId) {
+
         this.boardId = _boardId;
         this.ownerId = _ownerId;
         this.defaultColorPixel = '#CCC';
@@ -18,12 +19,13 @@
         this.ctxLayer = null;
         this.w = null;
         this.h = null;
-        this.colorPicker = $('.colorCanvasInput');
+        this.colorPicker = $('#picker');
         this.actionsType = [
             'addPixel',
             'removePixel',
             'updatePixel'
         ];
+
         this.history = new History();
         this.tools = {
             active: 'brush',
@@ -44,7 +46,8 @@
 
         // Set up the canvas element
         this.setup = function () {
-            self.colorPicker.css('background-color', randomColor());
+
+            self.colorPicker.spectrum("set", randomColor());
 
             self.canvas = document.getElementById('canvasboard');
             self.layer  = document.getElementById('layer');
@@ -187,6 +190,7 @@
                     self.getTool('eyedropper').dom.css('font-weight', 'normal');
                 }
             });
+
         };
 
         this.getOppositeAction = function(action) {
@@ -238,8 +242,7 @@
                 if (self.isCurrentTool('eyedropper')) {
                     self.pickColor(gx, gy);
                 } else {
-                    var colorPixel = self.colorPicker.css('background-color');
-                    self.drawPixelAt(gx, gy, colorPixel);
+                    self.drawPixelAt(gx, gy, self.colorPicker.spectrum("get").toHexString());
                 }
             } else if(self.isMouseDown === 3) { // Mouse right
                 self.removePixelAt(gx, gy);
@@ -248,13 +251,11 @@
 
         this.pickColor = function(x, y) {
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
-
             if (pixel) {
-                self.colorPicker.css('background-color', pixel.color);
+                self.colorPicker.spectrum("set", pixel.color);
             } else {
-                self.colorPicker.css('background-color', self.defaultColorPixel);
+                self.colorPicker.spectrum('set', self.defaultColorPixel);
             }
-
             self.setCurrentTool('brush');
         };
 
