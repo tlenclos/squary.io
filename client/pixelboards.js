@@ -263,8 +263,7 @@
             if (!self.isCurrentTool('brush')) {
                 return;
             }
-
-
+            
             addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
 
@@ -272,17 +271,16 @@
                 return;
             }
 
+            var colorHistory = pixel ? pixel.color : color;
+            var actionType = pixel ? self.actionsType[2] : self.actionsType[0];
+            self.history.add(
+                actionType,
+                {x: x, y:y, color: colorHistory, boardId: self.boardId}
+            );
+
             Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
                     Session.set('message', error.reason);
-                } else if (addToHistory) {
-                    var colorHistory = pixel ? pixel.color : color;
-                    var actionType = pixel ? self.actionsType[2] : self.actionsType[0];
-
-                    self.history.add(
-                        actionType,
-                        {x: x, y:y, color: colorHistory, boardId: self.boardId}
-                    );
                 }
             });
         };
