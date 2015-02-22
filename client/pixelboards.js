@@ -305,7 +305,7 @@
 
             Meteor.call('removePixel', {x:x, y:y, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
                 if (error) {
-                    Session.set('message', error.reason);
+                    Session.set('message', error);
                 } else if (addToHistory) {
                     self.history.add(
                         self.actionsType[1],

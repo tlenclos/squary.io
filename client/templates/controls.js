@@ -7,6 +7,14 @@ Template.controls.rendered = function() {
         showButtons: false,
         preferredFormat: "hex"
     });
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "onclick": null,
+        "timeOut": 5000,
+        "hideDuration": 0
+    }
 };
 
 Template.controls.helpers({

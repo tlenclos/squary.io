@@ -11,7 +11,7 @@
   "google": {
     "clientId": "clientId",
     "secret": "secret"
-  }
+  },
   "mandrillUsername": "mandrillUsername",
   "mandrillapiKey": "mandrillapiKey"
 }

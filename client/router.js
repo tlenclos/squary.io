@@ -12,6 +12,7 @@ Router.route('/', {
     name: 'boardsList',
     layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
+        Session.set('toast', { type: "clear" });
         return subscriptions.subscribe('boards');
     }
 });
@@ -51,15 +52,6 @@ Router.route('/user/:_id/edit', {
     }
 });
 
-Router.route('/board/create', function() {;
-    if (!Meteor.userId()) {
-        alert('Please login first.');
-    } else {
-        var boardId = BoardsCollections.insert({title: 'My pixel art'}); // TODO Unsafe
-        Router.go('board', {_id: boardId});
-    }
-});
-
 Router.route('/board/:_id', {
     name: 'board',
     layoutTemplate: 'noLayout',
@@ -88,7 +80,7 @@ Router.route('/changelog', function() {
 });
 
 Router.onBeforeAction(function() {
-    Session.set('message', null); // Clear flash message on page change
     this.next();
 });
+
 Router.onBeforeAction('dataNotFound', {only: 'board'});
