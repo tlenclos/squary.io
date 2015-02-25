@@ -1,17 +1,17 @@
 {
   "public": {
     "ga": {
-      "id": "UA-XXXXXX-00"
+      "id": "UA-2700248-16"
     }
   },
   "facebook": {
-    "clientId": "clientId",
-    "secret": "secret"
+    "clientId": "779006882159777",
+    "secret": "c09991b98b68312cd871218df0af6c23"
   },
   "google": {
-    "clientId": "clientId",
-    "secret": "secret"
-  }
+    "clientId": "371865696759-dgfqetos8fs7iujr0b2grhdf56t1cgl3.apps.googleusercontent.com",
+    "secret": "UQWKBpEg-1nCZJE1llGjhqS1"
+  },
   "mandrillUsername": "mandrillUsername",
   "mandrillapiKey": "mandrillapiKey"
 }

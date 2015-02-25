@@ -1,40 +1,31 @@
 <template name="controls">
     <div id="controls">
-        <p><a href="/">Board list</a></p>
-        <hr />
-
-        <p><input type="text" value="{{title}}" name="title" disabled="{{disableTitleEdition}}"/></p>
-        <hr />
+        <span id="board-edit-title">E</span>
+        <h2 id="board-title">{{title}}</h2>
+        <a id="board-title-save" class="button">Save title</a>
+        <p><span id="board-visibility" class="tag tag-public">public</span></p>
 
         {{#if owner}}
-            By <strong>{{owner}}</strong>
+            <p>By <strong>{{owner}}</strong></p>
         {{else}}
             <p class="message warning">This board has no owner, it will be deleted tonight. Please login to save your board.</p>
         {{/if}}
         <hr />
 
-        <p class="drawers">{{drawers}} drawers online</p>
+        <p class="drawers">{{drawers}} artists online</p>
         <hr />
 
-        <p>Right click to remove pixel</p>
-        <hr />
-
-        <p><em>[ctrl+z]</em> Undo</p>
-        <p><em>[ctrl+y]</em> Redo</p>
-        <p id="control-eyedropper"><em>[i]</em> Eyedropper</p>
-        <hr />
-
+        <a href="#" class="tool tool-brush tool-selected" data-tool="brush">Draw</a>
+        <a href="#" class="tool tool-eraser" data-tool="eraser">Erase</a>
         <input type='text' id='picker'/>
+        <a href="#" class="tool tool-pipette" data-tool="pipette">Pipette</a>
 
+        <div class="clear"></div>
         {{#if ownBoard}}
         <hr />
-        <p id="clean">Clean board</p>
-        <p><a href="" id="link-delete-board">[X] Delete board</a></p>
-        {{/if}}
-
-        {{#if message}}
-            <hr />
-            <p class="message error">{{message}}.</p>
+        <p class="row">
+            <a href="" class="six columns button" id="link-download-board">Download</a> <a href="" class="six columns button warn" id="link-delete-board">Delete</a>
+        </p>
         {{/if}}
     </div>
 </template>

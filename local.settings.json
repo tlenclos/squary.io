@@ -5,13 +5,13 @@
     }
   },
   "facebook": {
-    "clientId": "clientId",
-    "secret": "secret"
+    "clientId": "779039665489832",
+    "secret": "4b509f2e823a13a0f9714384c0c59e0e"
   },
   "google": {
-    "clientId": "clientId",
-    "secret": "secret"
-  }
-  "mandrillUsername": "mandrillUsername",
-  "mandrillapiKey": "mandrillapiKey"
+    "clientId": "371865696759-dgfqetos8fs7iujr0b2grhdf56t1cgl3.apps.googleusercontent.com",
+    "secret": "UQWKBpEg-1nCZJE1llGjhqS1"
+  },
+  "mandrillUsername": "thibzy@gmail.com",
+  "mandrillapiKey": "pgLZXbGMRJ1pDY0neeDmEg"
 }

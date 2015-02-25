@@ -30,6 +30,7 @@ a {
 
 hr {
     margin: 10px 0;
+    background-color: #D0D0D0;
 }
 
 .clearfix {
@@ -58,30 +59,36 @@ hr {
 }
 
 /* Header */
-#header {
-    height: 115px;
+.headerPixels {
     color: white;
     font-family: 'silkscreennormal', sans-serif;
+    width: 100%;
+}
+#header {
+    height: 115px;
 }
 #header .row {
     padding-top: 30px;
 }
+#header-mini .row {
+    padding-top: 9px;
+}
 #header .row .row {
     padding-top: 0;
 }
-#header #titles {
+.headerPixels #titles {
     padding-left: 30px;
     min-width: 340px;
 }
-#header h2 {
+.headerPixels h2 {
     font-size: 48px;
     margin-bottom: 0;
     line-height: 0.8;
 }
-#header h2 a {
+.headerPixels h2 a {
     color: white;
 }
-#header h3 {
+.headerPixels h3 {
     font-size: 16px;
     margin-top: 0;
 }
@@ -98,23 +105,41 @@ hr {
     border-radius: 0;
     display: none;
 }
-#header nav {
+.headerPixels nav {
     min-width: 380px;
     float: right;
 }
-#header nav a {
+.headerPixels nav a {
     color: white;
     text-align: center;
     line-height: 1;
     display: block;
 }
-#header nav .icon {
+.headerPixels nav .icon {
     font-size: 40px;
+}
+
+#header-mini {
+    height: 60px;
+    position: absolute;
+    z-index: 40;
+}
+#header-mini nav {
+    padding-right: 25px;
+}
+#header-mini nav a {
+    font-size: 1.7em;
+}
+
+#header #header-canvas {
+    height: 115px;
+}
+#header-mini #header-canvas {
+    height: 60px;
 }
 #header-canvas {
     box-sizing: border-box;
     width: 100%;
-    height: 115px;
     z-index: -200;
     position: absolute;
     top: 0;
@@ -202,38 +227,115 @@ hr {
     margin-left: -32px;
 }
 
+/* Buttons */
+.button {
+    border: 3px solid #19B0BA;
+    border-radius: 0;
+    color: #19B0BA;
+    text-transform: uppercase;
+    padding: 0 5px;
+}
+.button.warn {
+    color: #D0021B;
+    border-color: #D0021B;
+}
+
 /* Controls */
 #controls {
     box-sizing: border-box;
     position: absolute;
     z-index: 40;
-    border : 2px solid black;
-    padding : 10px;
-    background-color : white;
-    width: 210px;
+    padding : 20px 10px 10px 10px;
+    background-color : rgba(234, 239, 241, 0.9);
+    width: 240px;
+    top: 60px;
+    -moz-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.33);
+    -webkit-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.33);
+    -o-box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.33);
+    box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.33);
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#eee, Direction=90, Strength=5);
 }
-#controls input[type=text] {
+#controls .button {
+    margin-bottom: 0;
+}
+#controls p {
+    padding: 2px 0;
+}
+#controls h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    width: 200px;
+}
+#controls #board-edit-title {
+    background-color: grey;
+    padding: 0 5px;
+    display: block;
+    text-align: center;
+    float: right;
+    position: relative;
+    top: 5px;
+}
+#controls #board-title-save {
+    display: none;
     width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
 }
-#controls input[type=text]:disabled {
-    border: none;
-}
-
 #controls p {
     margin : 0;
 }
-#clean {
-    display: none;
+.drawers {
+    color: #6FB320;
 }
-.colorCanvasInput {
-    display: inline-block;
+
+/* Tools */
+.tool, .sp-preview-inner {
+    border: 2px solid #394451;
+    display: block;
+    border-radius: 50%;
+    width: 95px;
+    height: 95px;
+    box-sizing: border-box;
+    text-align: center;
+    padding-top: 50px;
+    float: left;
+    margin: 5px;
+    color: #7B7B81;
+}
+.tool:hover {
+    opacity: 0.9;
+}
+.tool-selected {
+    background: #394451;
+    color: white;
+}
+.tool-color {
+    background-color: #BF3E4E;
+    color: white;
+}
+/* Color picker */
+.sp-preview, .sp-replacer {
+    background: none;
+    border: none;
+    width: 95px;
+    height: 95px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    float: left;
+}
+.sp-preview-inner {
+    margin: 0;
+    color: white;
+}
+.sp-replacer {
+    overflow: auto;
+    margin: 5px;
+}
+.sp-dd {
+    display: none;
 }
 .error {
     color: red;
 }
-
 .warning {
     color: #8a6d3b;
     background-color: #fcf8e3;
@@ -285,4 +387,14 @@ footer a {
 }
 #profileBoards .board {
     border: none;
+}
+
+/* Tags */
+.tag {
+    color: white;
+    padding: 0 5px;
+}
+
+.tag-public {
+    background-color: #6FB320;
 }

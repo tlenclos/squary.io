@@ -5,8 +5,10 @@ Template.controls.rendered = function() {
         showInitial: true,
         showAlpha: true,
         showButtons: false,
-        preferredFormat: "hex"
+        preferredFormat: "hex",
+        replacerClassName: 'tool-color'
     });
+    $('.sp-preview-inner').text('Color');
 };
 
 Template.controls.helpers({
@@ -20,25 +22,32 @@ Template.controls.helpers({
         var user = Meteor.users.findOne({_id: this.userId});
         return user ? user.profile.name : false;
     },
-    disableTitleEdition: function() {
-        return this.userId === Meteor.userId() ? "false" : "true";
-    },
     message: function() {
         return Session.get('message');
     }
 });
 
 Template.controls.events({
-    'click p#clean': function () {
-        var pixels = PixelsCollection.find({}).fetch();
-        _.each(pixels, function(item) {
-            PixelsCollection.remove({'_id': item._id});
-        });
+    'click #board-title': function(event, context) {
+        // Make title editable on click
+        var titleDom = event.currentTarget;
+        var title = $(event.currentTarget);
+        title.attr('contenteditable', true);
+        title.trigger('focus');
+
+        // Set selection
+        var sel = window.getSelection();
+        sel.collapse(titleDom.firstChild, title.text().length);
+
+        // Display save button
+        $('#board-title-save').css('display', 'block');
     },
-    'change input[name=title]': function(event, context) {
-        var title = event.target.value;
+    'click #board-title-save': function(event, context) {
+        event.preventDefault();
+
+        event.target.style.display = 'none';
+        var title = $('#board-title').text()
         BoardsCollections.update(context.data._id, {$set:{title: title}});
-        console.log('Title changed to '+title);
     },
     'click #link-delete-board': function(event, context) {
         event.preventDefault();
@@ -48,5 +57,11 @@ Template.controls.events({
             Meteor.call('deleteBoard', context.data._id);
             Router.go('boardsList');
         }
+    },
+    'click #link-download-board': function(event, context) {
+        event.preventDefault();
+
+        // TODO capture canvas OR download full image rendered
+        alert("Sorry this feature is not implemented yet");
     }
 });

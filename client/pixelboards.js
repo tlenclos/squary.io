@@ -27,18 +27,31 @@
         ];
 
         this.history = new History();
+        this.toolActiveClass = 'tool-selected';
         this.tools = {
             active: 'brush',
             brush: {},
-            eyedropper: {
-                dom: $('#control-eyedropper'),
-                activate: function() {
-                    self.layer.style.cursor = 'crosshair';
-                    self.getTool('eyedropper').dom.css('font-weight', 'bold');
+            activate: function(tool) {
+                $(self.tools.list[tool].dom).addClass(self.toolActiveClass);
+            },
+            desactivate: function(tool) {
+                $(self.tools.list[tool].dom).removeClass(self.toolActiveClass);
+            },
+            list: {
+                brush: {
+                    dom: $('.tool-brush')
                 },
-                desactivate: function() {
-                    self.layer.style.cursor = 'default';
-                    self.getTool('eyedropper').dom.css('font-weight', 'normal');
+                eraser: {
+                    dom: $('.tool-eraser')
+                },
+                pipette: {
+                    dom: $('.tool-pipette'),
+                    activate: function() { // Specific activate action for this tool
+                        self.layer.style.cursor = 'crosshair';
+                    },
+                    desactivate: function() { // Specific desactive action for this tool
+                        self.layer.style.cursor = 'default';
+                    }
                 }
             }
         };
@@ -46,7 +59,6 @@
 
         // Set up the canvas element
         this.setup = function () {
-
             self.colorPicker.spectrum("set", randomColor());
 
             self.canvas = document.getElementById('canvasboard');
@@ -73,16 +85,21 @@
 
         // Tools
         this.getTool = function(toolName) {
-            return self.tools[toolName];
+            return self.tools.list[toolName];
         };
 
         this.setCurrentTool = function(toolName) {
-            if (self.tools[toolName]) {
-                if (typeof self.tools[self.tools.active].desactivate === 'function') {
-                    self.tools[self.tools.active].desactivate();
+            if (self.tools.list[toolName] && self.tools.active != toolName) {
+                // Global activate and desactive for all tools
+                self.tools.activate(toolName);
+                self.tools.desactivate(self.tools.active);
+
+                // Specific desactivate and activate actions
+                if (typeof self.tools.list[self.tools.active].desactivate === 'function') {
+                    self.tools.list[self.tools.active].desactivate();
                 }
-                if (typeof self.tools[toolName].activate === 'function') {
-                    self.tools[toolName].activate();
+                if (typeof self.tools.list[toolName].activate === 'function') {
+                    self.tools.list[toolName].activate();
                 }
 
                 self.tools.active = toolName;
@@ -96,7 +113,6 @@
         this.toggleTool = function(toolName) {
             if (self.isCurrentTool(toolName)) {
                 self.setCurrentTool('brush');
-                console.log('Tool brush activated');
             } else {
                 self.setCurrentTool(toolName);
                 console.log('Tool ' + toolName + ' activated');
@@ -166,6 +182,15 @@
             $(self.layer).mousemove(onMouseMove);
             $(self.layer).mousedown(onMouseDown);
             $(self.layer).mouseup(onMouseUp);
+            $('.tool').on('click', function(event) {
+                var tool = event.target.dataset.tool;
+                if (tool) {
+                    self.setCurrentTool(tool);
+                }
+            });
+            $('.tool-color').on('click', function() {
+                self.setCurrentTool('brush');
+            });
 
             // Keyboards event
             Mousetrap.bind(['mod+z'], function(e) {
@@ -178,19 +203,18 @@
                 self.executeAction(self.history.redo());
             });
 
+            Mousetrap.bind(['b'], function(e) {
+                e.preventDefault();
+                self.setCurrentTool('brush');
+            });
+            Mousetrap.bind(['e'], function(e) {
+                e.preventDefault();
+                self.toggleTool('eraser');
+            });
             Mousetrap.bind(['i'], function(e) {
                 e.preventDefault();
-                self.toggleTool('eyedropper');
-
-                if (self.isCurrentTool('eyedropper')) {
-                    self.layer.style.cursor = 'crosshair';
-                    self.getTool('eyedropper').dom.css('font-weight', 'bold');
-                } else {
-                    self.layer.style.cursor = 'default';
-                    self.getTool('eyedropper').dom.css('font-weight', 'normal');
-                }
+                self.toggleTool('pipette');
             });
-
         };
 
         this.getOppositeAction = function(action) {
@@ -220,7 +244,6 @@
                 actionType = self.getOppositeAction(action.action);
             }
 
-            console.log(actionType);
             // TODO Check if action is in array of actions
             if (actionType) {
                 switch (actionType) {
@@ -239,13 +262,17 @@
 
         this.clickEvent = function(mouseBtn, gx, gy) {
             if (self.isMouseDown === 1) { // Mouse left
-                if (self.isCurrentTool('eyedropper')) {
+                console.log(self.tools.active);
+
+                if (self.isCurrentTool('pipette')) {
                     self.pickColor(gx, gy);
+                } else if (self.isCurrentTool('eraser')) {
+                    self.removePixelAt(gx, gy, true);
                 } else {
-                    self.drawPixelAt(gx, gy, self.colorPicker.spectrum("get").toHexString());
+                    self.drawPixelAt(gx, gy, self.colorPicker.spectrum("get").toHexString(), true);
                 }
             } else if(self.isMouseDown === 3) { // Mouse right
-                self.removePixelAt(gx, gy);
+                self.removePixelAt(gx, gy, true);
             }
         };
 
@@ -264,10 +291,7 @@
                 return;
             }
 
-
-            addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
-
             if (pixel && pixel.color === color) {
                 return;
             }
@@ -288,14 +312,7 @@
         };
 
         this.removePixelAt = function(x, y, addToHistory) {
-            if (!self.isCurrentTool('brush')) {
-                return;
-
-            }
-
-            addToHistory = typeof addToHistory !== 'undefined' ?  addToHistory : true;
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
-
             if (!pixel) {
                 return;
             }

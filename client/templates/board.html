@@ -1,8 +1,14 @@
 <template name="board">
-    {{> controls}}
+    <div class="container">
+        {{> headerMini }}
 
-    <canvas id="layer" width="100%" height="100%"></canvas>
-    <canvas id="canvasboard" width="100%" height="100%">
-        Your browser does not support the HTML5 canvas tag.
-    </canvas>
+        <div>
+            {{> controls}}
+
+            <canvas id="layer" width="100%" height="100%"></canvas>
+            <canvas id="canvasboard" width="100%" height="100%">
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+        </div>
+    </div>
 </template>
