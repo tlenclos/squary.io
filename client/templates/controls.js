@@ -6,9 +6,22 @@ Template.controls.rendered = function() {
         showAlpha: true,
         showButtons: false,
         preferredFormat: "hex",
-        replacerClassName: 'tool-color'
+        replacerClassName: 'tool-color',
+        move: function(tinycolor) {
+            var rgb = tinycolor.toRgb();
+
+            if (Tools.getContrastForRgb(rgb) > 125) {
+                $('.sp-preview-inner').css('color', 'black');
+                $('#save-color').css('color', 'black');
+            } else {
+                $('.sp-preview-inner').css('color', 'white');
+                $('#save-color').css('color', 'white');
+            }
+
+            $('#save-color').css('background-color', tinycolor.toHexString());
+        }
     });
-    $('.sp-preview-inner').text('Color');
+    $('.sp-preview-inner').html('<i class="fa fa-tint"></i><br />Color');
 };
 
 Template.controls.helpers({
@@ -24,10 +37,25 @@ Template.controls.helpers({
     },
     message: function() {
         return Session.get('message');
+    },
+    colors: function() {
+        return ColorsCollections.find();
     }
 });
 
+Template.controls.setStateDeleteForSavedColor = function($color, deleteState) {
+  if (deleteState) {
+      $color.addClass('show-color-delete');
+      $color.text('x');
+      $color.css('color', Tools.getTextColorForRgb($color.css('background-color')));
+  } else {
+      $color.removeClass('show-color-delete');
+      $color.text('');
+  }
+};
+
 Template.controls.events({
+    // Title
     'click #board-title': function(event, context) {
         // Make title editable on click
         var titleDom = event.currentTarget;
@@ -42,13 +70,54 @@ Template.controls.events({
         // Display save button
         $('#board-title-save').css('display', 'block');
     },
+    'blur #board-title': function(event, context) {
+        var title = $(event.currentTarget);
+        title.attr('contenteditable', false);
+        BoardsCollections.update(context.data._id, {$set:{title: title.text()}});
+
+        // Hide save button
+        $('#board-title-save').css('display', 'none');
+    },
     'click #board-title-save': function(event, context) {
         event.preventDefault();
-
         event.target.style.display = 'none';
         var title = $('#board-title').text()
         BoardsCollections.update(context.data._id, {$set:{title: title}});
     },
+
+    // Colors
+    'click #save-color': function(event, context) {
+        event.preventDefault();
+        Meteor.call('addColor', Squary.board.boardId, event.target.style.backgroundColor);
+    },
+    'click .color-bubble': function(event, context) {
+        event.preventDefault();
+        if (event.target.classList.contains('show-color-delete')) {
+            return;
+        }
+
+        Squary.board.setColorForPicker(event.target.style.backgroundColor);
+    },
+    'mouseover .color-bubble':  function(event, context) {
+        var id = event.target.dataset.id;
+        Session.set('savedColorOver', event.target.dataset.id);
+
+        setTimeout(function() {
+            if (id === Session.get('savedColorOver')) {
+                Template.controls.setStateDeleteForSavedColor($(event.target), true);
+            }
+        }, 2500);
+    },
+    'mouseout .color-bubble':  function(event, context) {
+        Session.set('savedColorOver', null);
+        Template.controls.setStateDeleteForSavedColor($(event.target), false);
+    },
+    'click .show-color-delete': function(event, context) {
+        event.preventDefault();
+        Meteor.call('removeColor', Squary.board.boardId, event.target.dataset.id);
+    },
+
+    // Links
     'click #link-delete-board': function(event, context) {
         event.preventDefault();
 

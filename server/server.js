@@ -131,6 +131,10 @@ Meteor.publish("pixels", function(boardId) {
     this.unblock();
     return PixelsCollection.find({boardId: boardId});
 });
+Meteor.publish("colors", function(boardId) {
+    this.unblock();
+    return ColorsCollections.find({boardId: boardId});
+});
 Meteor.publish("boards", function(limit) {
     this.unblock();
     limit = limit || 10;

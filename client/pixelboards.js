@@ -20,6 +20,7 @@
         this.w = null;
         this.h = null;
         this.colorPicker = $('#picker');
+        this.colorSaver = $('#save-color');
         this.actionsType = [
             'addPixel',
             'removePixel',
@@ -59,7 +60,7 @@
 
         // Set up the canvas element
         this.setup = function () {
-            self.colorPicker.spectrum("set", randomColor());
+            this.setColorForPicker(randomColor());
 
             self.canvas = document.getElementById('canvasboard');
             self.layer  = document.getElementById('layer');
@@ -115,8 +116,13 @@
                 self.setCurrentTool('brush');
             } else {
                 self.setCurrentTool(toolName);
-                console.log('Tool ' + toolName + ' activated');
             }
+        };
+
+        this.setColorForPicker = function(color) {
+            self.colorPicker.spectrum("set", color);
+            self.colorPicker.spectrum("option", "move")(self.colorPicker.spectrum("get"));
+            self.colorSaver.css('background-color', color);
         };
 
         // Events
@@ -262,8 +268,6 @@
 
         this.clickEvent = function(mouseBtn, gx, gy) {
             if (self.isMouseDown === 1) { // Mouse left
-                console.log(self.tools.active);
-
                 if (self.isCurrentTool('pipette')) {
                     self.pickColor(gx, gy);
                 } else if (self.isCurrentTool('eraser')) {
@@ -279,9 +283,9 @@
         this.pickColor = function(x, y) {
             var pixel = PixelsCollection.findOne({x:x, y:y, boardId: self.boardId});
             if (pixel) {
-                self.colorPicker.spectrum("set", pixel.color);
+                this.setColorForPicker(pixel.color);
             } else {
-                self.colorPicker.spectrum('set', self.defaultColorPixel);
+                this.setColorForPicker(self.defaultColorPixel);
             }
             self.setCurrentTool('brush');
         };

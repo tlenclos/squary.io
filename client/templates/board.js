@@ -1,8 +1,10 @@
 Template.board.rendered = function() {
     Meteor.subscribe('pixels', this.data._id);
 
-    new Pixelboard(
+    var board = new Pixelboard(
         this.data._id,
         this.data.userId
-    ).setup(); // TODO How to clear previous objects created while we navigate to boards ?
+    );
+    board.setup();
+    Squary.board = board; // TODO Remove dependency with dom on board class
 };
