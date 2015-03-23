@@ -15,7 +15,3 @@ AccountsTemplates.addField({
     },
     errStr: 'Only "Full Name" allowed!'
 });
-
-Squary = {
-    board: null
-};

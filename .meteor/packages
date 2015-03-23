@@ -21,8 +21,6 @@ awatson1978:mousetrap
 meteorhacks:unblock
 meteorhacks:subs-manager
 meteorhacks:npm
-
-
 npm-container
 multiply:iron-router-progress
 useraccounts:semantic-ui
@@ -31,3 +29,4 @@ aldeed:autoform
 aldeed:collection2
 wylio:mandrill
 fortawesome:fontawesome
+reactive-var

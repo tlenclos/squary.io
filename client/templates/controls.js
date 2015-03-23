@@ -54,83 +54,91 @@ Template.controls.setStateDeleteForSavedColor = function($color, deleteState) {
   }
 };
 
-Template.controls.events({
-    // Title
-    'click #board-title': function(event, context) {
-        // Make title editable on click
-        var titleDom = event.currentTarget;
-        var title = $(event.currentTarget);
-        title.attr('contenteditable', true);
-        title.trigger('focus');
+Tracker.autorun(function() {
+    if (Squary.board.get() != null && Meteor.userId() === Squary.board.get().ownerId) {
+        Squary.board.get().setupControls(); // TODO Move all controls to template events (refactoring)
 
-        // Set selection
-        var sel = window.getSelection();
-        sel.collapse(titleDom.firstChild, title.text().length);
+        Template.controls.events({
+            // Title
+            'click #board-title': function (event, context) {
+                console.log(context);
+                
+                // Make title editable on click
+                var titleDom = event.currentTarget;
+                var title = $(event.currentTarget);
+                title.attr('contenteditable', true);
+                title.trigger('focus');
 
-        // Display save button
-        $('#board-title-save').css('display', 'block');
-    },
-    'blur #board-title': function(event, context) {
-        var title = $(event.currentTarget);
-        title.attr('contenteditable', false);
-        BoardsCollections.update(context.data._id, {$set:{title: title.text()}});
+                // Set selection
+                var sel = window.getSelection();
+                sel.collapse(titleDom.firstChild, title.text().length);
 
-        // Hide save button
-        $('#board-title-save').css('display', 'none');
-    },
-    'click #board-title-save': function(event, context) {
-        event.preventDefault();
-        event.target.style.display = 'none';
-        var title = $('#board-title').text()
-        BoardsCollections.update(context.data._id, {$set:{title: title}});
-    },
+                // Display save button
+                $('#board-title-save').css('display', 'block');
+            },
+            'blur #board-title': function (event, context) {
+                var title = $(event.currentTarget);
+                title.attr('contenteditable', false);
+                BoardsCollections.update(context.data._id, {$set: {title: title.text()}});
 
-    // Colors
-    'click #save-color': function(event, context) {
-        event.preventDefault();
-        Meteor.call('addColor', Squary.board.boardId, event.target.style.backgroundColor);
-    },
-    'click .color-bubble': function(event, context) {
-        event.preventDefault();
-        if (event.target.classList.contains('show-color-delete')) {
-            return;
-        }
+                // Hide save button
+                $('#board-title-save').css('display', 'none');
+            },
+            'click #board-title-save': function (event, context) {
+                event.preventDefault();
+                event.target.style.display = 'none';
+                var title = $('#board-title').text()
+                BoardsCollections.update(context.data._id, {$set: {title: title}});
+            },
 
-        Squary.board.setColorForPicker(event.target.style.backgroundColor);
-    },
-    'mouseover .color-bubble':  function(event, context) {
-        var id = event.target.dataset.id;
-        Session.set('savedColorOver', event.target.dataset.id);
+            // Colors
+            'click #save-color': function (event, context) {
+                event.preventDefault();
+                Meteor.call('addColor', Squary.board.boardId, event.target.style.backgroundColor);
+            },
+            'click .color-bubble': function (event, context) {
+                event.preventDefault();
+                if (event.target.classList.contains('show-color-delete')) {
+                    return;
+                }
 
-        setTimeout(function() {
-            if (id === Session.get('savedColorOver')) {
-                Template.controls.setStateDeleteForSavedColor($(event.target), true);
+                Squary.board.setColorForPicker(event.target.style.backgroundColor);
+            },
+            'mouseover .color-bubble': function (event, context) {
+                var id = event.target.dataset.id;
+                Session.set('savedColorOver', event.target.dataset.id);
+
+                setTimeout(function () {
+                    if (id === Session.get('savedColorOver')) {
+                        Template.controls.setStateDeleteForSavedColor($(event.target), true);
+                    }
+                }, 2500);
+            },
+            'mouseout .color-bubble': function (event, context) {
+                Session.set('savedColorOver', null);
+                Template.controls.setStateDeleteForSavedColor($(event.target), false);
+            },
+            'click .show-color-delete': function (event, context) {
+                event.preventDefault();
+                Meteor.call('removeColor', Squary.board.boardId, event.target.dataset.id);
+            },
+
+            // Links
+            'click #link-delete-board': function (event, context) {
+                event.preventDefault();
+
+                var deleteConfirmed = confirm('Are you sure to delete the board "' + context.data.title + '"');
+                if (deleteConfirmed) {
+                    Meteor.call('deleteBoard', context.data._id);
+                    Router.go('boardsList');
+                }
+            },
+            'click #link-download-board': function (event, context) {
+                event.preventDefault();
+
+                // TODO capture canvas OR download full image rendered
+                alert("Sorry this feature is not implemented yet");
             }
-        }, 2500);
-    },
-    'mouseout .color-bubble':  function(event, context) {
-        Session.set('savedColorOver', null);
-        Template.controls.setStateDeleteForSavedColor($(event.target), false);
-    },
-    'click .show-color-delete': function(event, context) {
-        event.preventDefault();
-        Meteor.call('removeColor', Squary.board.boardId, event.target.dataset.id);
-    },
-
-    // Links
-    'click #link-delete-board': function(event, context) {
-        event.preventDefault();
-
-        var deleteConfirmed = confirm('Are you sure to delete the board "'+context.data.title+'"');
-        if (deleteConfirmed) {
-            Meteor.call('deleteBoard', context.data._id);
-            Router.go('boardsList');
-        }
-    },
-    'click #link-download-board': function(event, context) {
-        event.preventDefault();
-
-        // TODO capture canvas OR download full image rendered
-        alert("Sorry this feature is not implemented yet");
+        });
     }
 });

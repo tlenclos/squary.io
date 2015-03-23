@@ -5,6 +5,6 @@ Template.board.rendered = function() {
         this.data._id,
         this.data.userId
     );
-    board.setup();
-    Squary.board = board; // TODO Remove dependency with dom on board class
+    board.setupBoard();
+    Squary.board.set(board); // TODO Remove dependency with dom on board class
 };

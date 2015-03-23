@@ -59,9 +59,7 @@
         var self = this;
 
         // Set up the canvas element
-        this.setup = function () {
-            this.setColorForPicker(randomColor());
-
+        this.setupBoard = function () {
             self.canvas = document.getElementById('canvasboard');
             self.layer  = document.getElementById('layer');
 
@@ -79,9 +77,12 @@
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
             console.log('Opening pixel board ' + self.boardId);
-
-            self.setupEvents();
             self.startUpdateListener();
+        };
+
+        this.setupControls = function() {
+            this.setColorForPicker(randomColor());
+            self.setupEvents();
         };
 
         // Tools
@@ -353,7 +354,7 @@
         // Set up listeners for the draw method
         this.startUpdateListener = function () {
             // Each time we interact with PixelsCollection this method is call
-            Deps.autorun(function ()
+            Tracker.autorun(function ()
             {
                 var pixels = PixelsCollection.find({boardId: self.boardId});
 

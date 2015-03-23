@@ -2,8 +2,11 @@
     <div id="controls">
         {{#if owner}}<i id="board-edit-title" class="fa fa-pencil-square"></i>{{/if}}
         <h2 id="board-title">{{title}}</h2>
+
+        {{#if ownBoard}}
         <a id="board-title-save" class="button">Save title</a>
         <p><span id="board-visibility" class="tag tag-public">public</span></p>
+        {{/if}}
 
         {{#if owner}}
             <p>By <strong>{{owner}}</strong></p>
@@ -15,7 +18,7 @@
         <p class="drawers">{{drawers}} artists online</p>
         <hr />
 
-        {{#if owner}}
+        {{#if ownBoard}}
         <a href="#" class="tool tool-brush tool-selected" data-tool="brush"><i class="fa fa-paint-brush"></i><br />Draw</a>
         <a href="#" class="tool tool-eraser" data-tool="eraser"><i class="fa fa-eraser"></i><br />Erase</a>
         <input type='text' id='picker'/>
@@ -30,7 +33,7 @@
             <a href="#" class="color-bubble" data-id="{{_id}}" style="background-color: {{color}}"></a>
         {{/each}}
 
-        {{#if owner}}
+        {{#if ownBoard}}
         <a href="#" class="color-bubble-add" id="save-color">+</a>
         <div class="clear"></div>
 
