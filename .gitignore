@@ -2,3 +2,4 @@ bower_components
 .idea
 .generated/images/board
 .meteor/versions
+local.settings.json
