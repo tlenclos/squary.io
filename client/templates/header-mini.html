@@ -6,8 +6,12 @@
             </div>
             <div class="six columns padding10">
                 <nav class="row">
-                    <div class="six columns"><a href="/sign-in">Connexion</a></div>
-                    <div class="six columns"><a href="/sign-up">Inscription</a></div>
+                    {{#if loggedUser}}
+                        <div class="six columns"><a href="/user/{{loggedUser._id}}">Profile</a></div>
+                    {{else}}
+                        <div class="six columns"><a href="/sign-in">Connexion</a></div>
+                        <div class="six columns"><a href="/sign-up">Inscription</a></div>
+                    {{/if}}
                 </nav>
             </div>
         </div>

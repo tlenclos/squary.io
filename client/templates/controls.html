@@ -2,8 +2,11 @@
     <div id="controls">
         {{#if owner}}<i id="board-edit-title" class="fa fa-pencil-square"></i>{{/if}}
         <h2 id="board-title">{{title}}</h2>
-        <a id="board-title-save" class="button">Save title</a>
-        <p><span id="board-visibility" class="tag tag-public">public</span></p>
+
+        {{#if ownBoard}}
+            <a id="board-title-save" class="button">Save title</a>
+            <p><span id="board-visibility" class="tag tag-public">public</span></p>
+        {{/if}}
 
         {{#if owner}}
             <p>By <strong>{{owner}}</strong></p>
