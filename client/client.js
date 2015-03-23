@@ -3,7 +3,7 @@ Meteor.startup(function(){
     Deps.autorun(function ()
     {
         var message = Session.get('toast');
-        if(message) {
+        if (message) {
             if(message.type === "info") {
                 toastr.info(message.msg, message.title);
                 Session.set('toast', null);

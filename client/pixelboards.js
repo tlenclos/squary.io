@@ -301,24 +301,26 @@
             if (pixel && pixel.color === color) {
                 return;
             }
-            if(addToHistory) {
-                var colorHistory = pixel ? pixel.color : color;
-                var actionType = pixel ? self.actionsType[2] : self.actionsType[0];
+
+            var colorHistory = pixel ? pixel.color : color;
+            var actionType = pixel ? self.actionsType[2] : self.actionsType[0];
+
+            if (addToHistory) {
                 self.history.add(
                     actionType,
-                    {x: x, y:y, color: colorHistory, boardId: self.boardId}
+                    {x: x, y: y, color: colorHistory, boardId: self.boardId}
                 );
-
-                Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
-                    if (error) {
-                        Session.set('toast', {
-                            type: "warning",
-                            title: "Can't draw",
-                            msg: "This board is not yours."
-                        });
-                    }
-                });
             }
+
+            Meteor.call('addPixel', {x:x, y:y, color:color, boardId: self.boardId, ownerId: self.ownerId}, function(error, result) {
+                if (error) {
+                    Session.set('toast', {
+                        type: "warning",
+                        title: "Can't draw",
+                        msg: "This board is not yours."
+                    });
+                }
+            });
         };
 
         this.removePixelAt = function(x, y, addToHistory) {

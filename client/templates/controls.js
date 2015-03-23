@@ -134,8 +134,21 @@ Template.controls.events({
 
         var deleteConfirmed = confirm('Are you sure to delete the board "'+context.data.title+'"');
         if (deleteConfirmed) {
-            Meteor.call('deleteBoard', context.data._id);
-            Router.go('boardsList');
+            Meteor.call('deleteBoard', context.data._id, function(error, result) {
+                if (error) {
+                    Session.set('toast', {
+                        type: "error",
+                        title: "Error",
+                        msg: error.reason
+                    });
+                } else {
+                    Session.set('toast', {
+                        type: "info",
+                        title: "Board deleted"
+                    });
+                    Router.go('boardsList');
+                }
+            });
         }
     },
     'click #link-download-board': function(event, context) {

@@ -12,7 +12,6 @@ Router.route('/', {
     name: 'boardsList',
     layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
-        Session.set('toast', { type: "clear" });
         return subscriptions.subscribe('boards');
     }
 });
