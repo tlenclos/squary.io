@@ -14,7 +14,11 @@ Template.header.events({
             if (error) {
                 return alert(error.reason);
             }
-
+            Session.set('toast', {
+                type: "info",
+                title: "Board Created",
+                msg: "Have a nice draw !"
+            });
             Router.go('board', {_id: result});
         });
     }

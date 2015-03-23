@@ -21,7 +21,18 @@ Template.controls.rendered = function() {
             $('#save-color').css('background-color', tinycolor.toHexString());
         }
     });
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "onclick": null,
+        "timeOut": 5000,
+        "hideDuration": 0
+    }
+
     $('.sp-preview-inner').html('<i class="fa fa-tint"></i><br />Color');
+
 };
 
 Template.controls.helpers({
