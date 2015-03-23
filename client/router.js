@@ -56,7 +56,10 @@ Router.route('/board/:_id', {
     name: 'board',
     layoutTemplate: 'noLayout',
     subscriptions: function() {
-        return subscriptions.subscribe('user', this.params._id);
+        return [
+            subscriptions.subscribe('user', this.params._id),
+            subscriptions.subscribe('colors', this.params._id)
+        ]
     },
     waitOn: function() {
         return subscriptions.subscribe('board', this.params._id);

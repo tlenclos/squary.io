@@ -1,40 +1,45 @@
 <template name="controls">
     <div id="controls">
-        <p><a href="/">Board list</a></p>
-        <hr />
-
-        <p><input type="text" value="{{title}}" name="title" disabled="{{disableTitleEdition}}"/></p>
-        <hr />
+        {{#if owner}}<i id="board-edit-title" class="fa fa-pencil-square"></i>{{/if}}
+        <h2 id="board-title">{{title}}</h2>
+        <a id="board-title-save" class="button">Save title</a>
+        <p><span id="board-visibility" class="tag tag-public">public</span></p>
 
         {{#if owner}}
-            By <strong>{{owner}}</strong>
+            <p>By <strong>{{owner}}</strong></p>
         {{else}}
             <p class="message warning">This board has no owner, it will be deleted tonight. Please login to save your board.</p>
         {{/if}}
         <hr />
 
-        <p class="drawers">{{drawers}} drawers online</p>
+        <p class="drawers">{{drawers}} artists online</p>
         <hr />
 
-        <p>Right click to remove pixel</p>
-        <hr />
-
-        <p><em>[ctrl+z]</em> Undo</p>
-        <p><em>[ctrl+y]</em> Redo</p>
-        <p id="control-eyedropper"><em>[i]</em> Eyedropper</p>
-        <hr />
-
+        {{#if owner}}
+        <a href="#" class="tool tool-brush tool-selected" data-tool="brush"><i class="fa fa-paint-brush"></i><br />Draw</a>
+        <a href="#" class="tool tool-eraser" data-tool="eraser"><i class="fa fa-eraser"></i><br />Erase</a>
         <input type='text' id='picker'/>
+        <a href="#" class="tool tool-pipette" data-tool="pipette"><i class="fa fa-eyedropper"></i><br />Pipette</a>
+
+        <div class="clear"></div>
+
+        <hr />
+        {{/if}}
+
+        {{#each colors}}
+            <a href="#" class="color-bubble" data-id="{{_id}}" style="background-color: {{color}}"></a>
+        {{/each}}
+
+        {{#if owner}}
+        <a href="#" class="color-bubble-add" id="save-color">+</a>
+        <div class="clear"></div>
 
         {{#if ownBoard}}
         <hr />
-        <p id="clean">Clean board</p>
-        <p><a href="" id="link-delete-board">[X] Delete board</a></p>
+        <p class="row">
+            <a href="" class="six columns button" id="link-download-board"><i class="fa fa-download"></i> Download</a> <a href="" class="six columns button warn" id="link-delete-board"><i class="fa fa-trash-o"></i> Delete</a>
+        </p>
         {{/if}}
-
-        {{#if message}}
-            <hr />
-            <p class="message error">{{message}}.</p>
         {{/if}}
     </div>
 </template>

@@ -30,4 +30,10 @@ AccountsTemplates.addField({
         return value === 'Full Name';
     },
     errStr: 'Only "Full Name" allowed!'
+
 });
+
+Squary = {
+    board: null
+};
+
