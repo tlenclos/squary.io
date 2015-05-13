@@ -56,7 +56,7 @@ Router.route('/board/:_id', {
     layoutTemplate: 'noLayout',
     subscriptions: function() {
         return [
-            subscriptions.subscribe('user', this.params._id),
+            subscriptions.subscribe('boardOwner', this.params._id),
             subscriptions.subscribe('colors', this.params._id)
         ]
     },

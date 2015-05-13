@@ -14,7 +14,7 @@ var convertHexToDec = function(value) {
 // Methods
 Meteor.methods({
     getChangelog: function() {
-        var url = "https://raw.githubusercontent.com/tlenclos/Pixelboard/master/CHANGELOG.md";
+        var url = "https://raw.githubusercontent.com/tlenclos/Pixelboard/master/CHANGELOG.md"; // TODO Move this path in config
         return HTTP.get(url);
     },
     renderAllBoardImage: function() {
@@ -79,9 +79,9 @@ Meteor.methods({
 
                     try {
                         if (color.indexOf('#') > -1) {
-                            red = convertHexToDec(color.substr(1, 2));
-                            green = convertHexToDec(color.substr(3, 2));
-                            blue = convertHexToDec(color.substr(5, 2));
+                            red = color.substr(1, 2);
+                            green = color.substr(3, 2);
+                            blue = color.substr(5, 2);
                         } else {
                             var rgb = pixel.color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
                             red = convertToHex(rgb[1]);
@@ -112,6 +112,7 @@ Meteor.methods({
             };
             var jpegImageData = jpegLib.encode(rawImageData, 100);
 
+            // TODO Move this path in config
             var imagePath = 'images/board/preview_'+boardId+'.jpg';
             var fileName = basePathGeneratedDir+'/'+imagePath;
             fs.writeFile(fileName, jpegImageData.data, 'binary', Meteor.bindEnvironment(function(err) {

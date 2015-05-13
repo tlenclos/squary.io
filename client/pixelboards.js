@@ -7,10 +7,12 @@
     /* global _ */
 
     // Board Class
-    globals.Pixelboard = function (_boardId, _ownerId) {
+    globals.Pixelboard = function (_boardId, _ownerId, _currentUserId, _canDraw) {
 
         this.boardId = _boardId;
         this.ownerId = _ownerId;
+        this.currentUserId = _currentUserId;
+        this.canDraw = _canDraw;
         this.defaultColorPixel = '#CCC';
         this.isMouseDown = 0;
         this.pixelSize = 30;
@@ -60,8 +62,6 @@
 
         // Set up the canvas element
         this.setup = function () {
-            this.setColorForPicker(randomColor());
-
             self.canvas = document.getElementById('canvasboard');
             self.layer  = document.getElementById('layer');
 
@@ -78,9 +78,13 @@
             self.w = Math.round(self.canvas.width / self.pixelSize);
             self.h = Math.round(self.canvas.height / self.pixelSize);
 
-            console.log('Opening pixel board ' + self.boardId);
+            console.log('Opening pixel board', self.boardId);
+            console.log('User can draw ?', this.canDraw);
 
-            self.setupEvents();
+            if (this.canDraw) {
+                this.setColorForPicker(randomColor());
+                self.setupEvents();
+            }
             self.startUpdateListener();
         };
 

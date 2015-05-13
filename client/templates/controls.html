@@ -18,7 +18,7 @@
         <p class="drawers">{{drawers}} artists online</p>
         <hr />
 
-        {{#if owner}}
+        {{#if ownBoard}}
         <a href="#" class="tool tool-brush tool-selected" data-tool="brush"><i class="fa fa-paint-brush"></i><br />Draw</a>
         <a href="#" class="tool tool-eraser" data-tool="eraser"><i class="fa fa-eraser"></i><br />Erase</a>
         <input type='text' id='picker'/>
@@ -33,16 +33,14 @@
             <a href="#" class="color-bubble" data-id="{{_id}}" style="background-color: {{color}}"></a>
         {{/each}}
 
-        {{#if owner}}
+        {{#if ownBoard}}
         <a href="#" class="color-bubble-add" id="save-color">+</a>
         <div class="clear"></div>
 
-        {{#if ownBoard}}
         <hr />
         <p class="row">
             <a href="" class="six columns button" id="link-download-board"><i class="fa fa-download"></i> Download</a> <a href="" class="six columns button warn" id="link-delete-board"><i class="fa fa-trash-o"></i> Delete</a>
         </p>
-        {{/if}}
         {{/if}}
     </div>
 </template>

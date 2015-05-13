@@ -37,7 +37,7 @@ Template.controls.rendered = function() {
 
 Template.controls.helpers({
     ownBoard: function() {
-        return this.userId === Meteor.userId();
+        return Meteor.userId() && (this.userId === Meteor.userId());
     },
     drawers: function () {
         return UserConnections.find().count();
