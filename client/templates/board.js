@@ -1,7 +1,7 @@
 Template.board.rendered = function() {
     Meteor.subscribe('pixels', this.data._id);
 
-    var canDraw = Meteor.userId() && (Meteor.userId()  === this.data.userId);
+    var canDraw = !this.data.userId || (Meteor.userId() && (Meteor.userId()  === this.data.userId));
     var board = new Pixelboard(
         this.data._id,
         this.data.userId,
