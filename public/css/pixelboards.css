@@ -149,9 +149,17 @@ hr {
     top: 0;
     border-bottom: 5px solid #7B7B81;
 }
-#boards .columns {
-    width: 29%;
-    margin: 0 2% 2% 2%;
+#boards {
+    -webkit-column-count: 3;
+    -webkit-column-gap: 60px;
+    -webkit-column-fill: auto;
+    -moz-column-count: 3;
+    -moz-column-gap: 60px;
+    -moz-column-fill: auto;
+    column-count: 3;
+    column-gap: 60px;
+    column-fill: auto;
+    margin: 40px 40px 0 40px;
 }
 #sort {
     padding: 0 2%;
@@ -162,10 +170,16 @@ hr {
 .board {
     background-color: white;
     border-bottom: 5px solid #7B7B81;
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    column-break-inside: avoid;
     padding: 4%;
+    margin-bottom: 40px;
 }
 .board-title {
     margin-bottom: 0.5rem;
+    max-height: 40px;
+    overflow: hidden;
 }
 .board-title a {
     text-transform: uppercase;
