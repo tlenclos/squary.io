@@ -22,6 +22,11 @@ UI.registerHelper('loggedUser', function() {
     return Meteor.user();
 });
 
+UI.registerHelper('getPreviewUrl', function(id) {
+    var image = ImagesCollection.findOne(id);
+    return image ? image.url() : null;
+});
+
 AccountsTemplates.addField({
     _id: 'name',
     type: 'text',

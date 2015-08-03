@@ -12,7 +12,10 @@ Router.route('/', {
     name: 'boardsList',
     layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
-        return subscriptions.subscribe('boards');
+        return [
+            subscriptions.subscribe('boards'),
+            subscriptions.subscribe('boardPreviews')
+        ];
     }
 });
 
@@ -26,13 +29,14 @@ Router.route('/user/:_id', {
         return [
             subscriptions.subscribe('user', this.params._id),
             subscriptions.subscribe('userBoards', this.params._id),
+            subscriptions.subscribe('boardPreviews')
         ];
     },
     data: function() {
         return {
             user: Meteor.users.findOne(this.params._id),
             userBoards: BoardsCollections.find({userId: this.params._id}),
-            userBoardsCount: BoardsCollections.find({userId: this.params._id}).count()
+            userBoardsCount: BoardsCollections.find({userId: this.params._id}).count(),
         };
     }
 });

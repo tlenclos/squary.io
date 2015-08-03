@@ -59,3 +59,7 @@ Meteor.publish('onlineUsers', function() {
         }), UserStatus.connections.find()
     ];
 });
+
+Meteor.publish('boardPreviews', function() {
+    return ImagesCollection.find();
+});

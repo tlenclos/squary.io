@@ -15,7 +15,7 @@
                     <a href="{{pathFor 'board'}}">
 
                         {{#if thumbnail}}
-                            <img class="u-max-full-width board-thumbnail" src="/board_image/{{thumbnail}}" />
+                            <img class="u-max-full-width board-thumbnail" src="{{ getPreviewUrl thumbnail }}" />
                         {{else}}
                             <span class="no-preview">No preview</span>
                         {{/if}}

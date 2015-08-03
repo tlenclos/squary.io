@@ -31,3 +31,5 @@ aldeed:autoform
 aldeed:collection2
 wylio:mandrill
 fortawesome:fontawesome
+cfs:standard-packages
+cfs:gridfs

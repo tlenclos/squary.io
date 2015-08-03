@@ -1,14 +1,9 @@
-var basePathGeneratedDir = process.env['PWD'] +'/.generated';
 var fs = Npm.require('fs');
 
 var convertToHex = function(value) {
     var val = (value * 1).toString(16);
     val = (val.length > 1) ? val : "0" + val;
     return val;
-};
-
-var convertHexToDec = function(value) {
-    return parseInt(value, 16);
 };
 
 // Methods
@@ -112,18 +107,18 @@ Meteor.methods({
             };
             var jpegImageData = jpegLib.encode(rawImageData, 100);
 
-            // TODO Move this path in config
-            var imagePath = 'images/board/preview_'+boardId+'.jpg';
-            var fileName = basePathGeneratedDir+'/'+imagePath;
-            fs.writeFile(fileName, jpegImageData.data, 'binary', Meteor.bindEnvironment(function(err) {
-                if (err) {
-                    console.log(err);
-                    throw (new Meteor.Error(500, 'Failed to save file.', err));
-                } else {
-                    console.log('The file ' + fileName + ' was saved');
-                    BoardsCollections.update(boardId, {$set:{thumbnail: imagePath}});
-                }
-            }));
+            var newFile = new FS.File();
+            newFile.attachData(jpegImageData.data, {type: 'image/jpg'}, function(error){
+                if (error) throw error;
+                newFile.name('preview_'+boardId+'.jpg');
+
+                ImagesCollection.insert(newFile, function (err, fileObj) {
+                    if (!err) {
+                        console.log('Update preview for board', boardId);
+                        BoardsCollections.update(boardId, {$set:{thumbnail: fileObj._id}});
+                    }
+                });
+            });
         }
     }
 });
