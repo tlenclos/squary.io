@@ -1,5 +1,5 @@
 <template name="profile">
-    <h2>{{ user.profile.name }}'s profile {{#if isCurrentUser }}<a href="{{pathFor 'profileEdit' data=user}}" class="button">Edit</a>{{/if}}</h2>
+    <h2>{{ user.profile.name }}'s profile {{#if isCurrentUser }}<a href="{{pathFor 'profileEdit' data=user}}" class="button button-primary">Edit</a>{{/if}}</h2>
 
     {{#if isCurrentUser }}
         {{> atNavButton}}

@@ -246,19 +246,20 @@ hr {
 }
 
 /* Buttons */
-.button {
+.button-pixel {
     border: 3px solid #19B0BA;
     border-radius: 0;
     color: #19B0BA;
     text-transform: uppercase;
-    padding: 0 5px;
     font-size: 12px;
+    padding: 5px;
+    text-align: center;
 }
-.button.warn {
+.button-pixel.warn {
     color: #D0021B;
     border-color: #D0021B;
 }
-.button i {
+.button-pixel i {
     font-size: 15px;
 }
 
@@ -277,7 +278,7 @@ hr {
     box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.33);
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#eee, Direction=90, Strength=5);
 }
-#controls .button {
+#controls .button-pixel {
     margin-bottom: 0;
 }
 #controls p {
@@ -441,4 +442,8 @@ footer a {
 
 .tag-public {
     background-color: #6FB320;
+}
+
+.footer-controls {
+    text-align: center;
 }

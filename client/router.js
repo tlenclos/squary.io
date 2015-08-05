@@ -18,7 +18,7 @@ Router.route('/', {
     layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
         return [
-            subscriptions.subscribe('boards')
+            subscriptions.subscribe('boards', 10)
         ];
     }
 });
