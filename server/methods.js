@@ -22,12 +22,14 @@ Meteor.methods({
         });
     },
     encodeBoardImage: function(boardId) {
-        console.log('Render board '+boardId);
-
-        var jpegLib = Meteor.npmRequire('jpeg-js');
         var pixels = PixelsCollection.find({boardId: boardId});
         var height = 0, width = 0;
         var pixelsArray = [];
+        var board = BoardsCollections.findOne(boardId);
+
+        if (!board || board.pixels >= pixels.count()) {
+            return;
+        }
 
         if (pixels.count() > 0) {
             // Determine size of image
@@ -107,6 +109,7 @@ Meteor.methods({
                 width: width,
                 height: height
             };
+            var jpegLib = Meteor.npmRequire('jpeg-js');
             var jpegImageData = jpegLib.encode(rawImageData, 100);
 
             var newFile = new FS.File();
@@ -117,7 +120,7 @@ Meteor.methods({
                 ImagesCollection.insert(newFile, function (err, fileObj) {
                     if (!err) {
                         console.log('Update preview for board', boardId);
-                        BoardsCollections.update(boardId, {$set:{thumbnail: fileObj._id}});
+                        BoardsCollections.update(boardId, {$set:{thumbnail: fileObj._id, pixels: pixels.count()}});
                     }
                 });
             });
