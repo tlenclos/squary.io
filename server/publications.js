@@ -15,7 +15,7 @@ Meteor.publishComposite("boards", function(limit) {
         find: function() {
             limit = limit || 10;
             return BoardsCollections.find({}, {
-                sort: {createdAt: -1},
+                sort: {pixels: -1, createdAt: -1},
                 limit: limit
             });
         },

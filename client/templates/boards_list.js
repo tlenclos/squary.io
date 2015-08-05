@@ -13,7 +13,7 @@ Template.boardsList.events({
 })
 Template.boardsList.helpers({
     boards: function() {
-        return BoardsCollections.find({}, {sort: {createdAt: -1}});
+        return BoardsCollections.find({}, {sort: {pixels: -1, createdAt: -1}});
     },
     author: function() {
         return Meteor.users.findOne(this.userId);
