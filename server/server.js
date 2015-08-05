@@ -36,6 +36,7 @@ Meteor.startup(function(){
     }
 
     // Cronjobs
+    /*
     SyncedCron.add({
         name: 'Clear boards not linked to a user',
         schedule: function(parser) {
@@ -51,10 +52,12 @@ Meteor.startup(function(){
             return true;
         }
     });
+    */
+
     SyncedCron.add({
         name: 'Render recently updated board',
         schedule: function(parser) {
-            return parser.text('every 5 minutes');
+            return parser.text('every 10 minutes');
         },
         job: function() {
             Meteor.call('renderAllBoardImage');
@@ -70,6 +73,6 @@ Meteor.startup(function(){
         key: Meteor.settings.mandrillapiKey
     });
 
-    Accounts.emailTemplates.siteName = "Squary.io";
-    Accounts.emailTemplates.from = "no-replay@squary.io";
+    Accounts.emailTemplates.siteName = "Squary";
+    Accounts.emailTemplates.from = "no-reply@squary.io";
 });

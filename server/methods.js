@@ -9,7 +9,9 @@ var convertToHex = function(value) {
 // Methods
 Meteor.methods({
     getChangelog: function() {
-        var url = "https://raw.githubusercontent.com/tlenclos/Pixelboard/master/CHANGELOG.md"; // TODO Move this path in config
+        // TODO Move this path in config
+        // TODO Use a cache
+        var url = "https://raw.githubusercontent.com/tlenclos/Pixelboard/master/CHANGELOG.md";
         return HTTP.get(url);
     },
     renderAllBoardImage: function() {

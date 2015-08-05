@@ -1,4 +1,9 @@
-var subscriptions = new SubsManager();
+var subscriptions = new SubsManager({
+    // maximum number of cache subscriptions
+    cacheLimit: 10,
+    // any subscription will be expire after 5 minute, if it's not subscribed again
+    expireIn: 5
+});
 
 Router.configure({
     layoutTemplate: 'layout',
@@ -13,8 +18,7 @@ Router.route('/', {
     layoutTemplate: 'layoutNoWrapper',
     subscriptions: function() {
         return [
-            subscriptions.subscribe('boards'),
-            subscriptions.subscribe('boardPreviews')
+            subscriptions.subscribe('boards')
         ];
     }
 });
@@ -28,8 +32,7 @@ Router.route('/user/:_id', {
     waitOn: function() {
         return [
             subscriptions.subscribe('user', this.params._id),
-            subscriptions.subscribe('userBoards', this.params._id),
-            subscriptions.subscribe('boardPreviews')
+            subscriptions.subscribe('userBoards', this.params._id)
         ];
     },
     data: function() {
@@ -61,7 +64,7 @@ Router.route('/board/:_id', {
     subscriptions: function() {
         return [
             subscriptions.subscribe('boardOwner', this.params._id),
-            subscriptions.subscribe('colors', this.params._id)
+            Meteor.subscribe('colors', this.params._id)
         ]
     },
     waitOn: function() {

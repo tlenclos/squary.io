@@ -11,7 +11,7 @@
         {{#if owner}}
             <p>By <strong>{{owner}}</strong></p>
         {{else}}
-            <p class="message warning">This board has no owner, it will be deleted tonight. Please login to save your board.</p>
+            <p class="message warning">This board has no owner and everyone can draw. Please login to protect your board.</p>
         {{/if}}
         <hr />
 
@@ -39,7 +39,10 @@
 
         <hr />
         <p class="row">
-            <a href="" class="six columns button" id="link-download-board"><i class="fa fa-download"></i> Download</a> <a href="" class="six columns button warn" id="link-delete-board"><i class="fa fa-trash-o"></i> Delete</a>
+            {{#if owner}}
+                <a href="" class="six columns button" id="link-download-board"><i class="fa fa-download"></i> Download</a>
+                <a href="" class="six columns button warn" id="link-delete-board"><i class="fa fa-trash-o"></i> Delete</a>
+            {{/if}}
         </p>
         {{/if}}
     </div>
